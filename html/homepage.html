@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+        <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/style.css">
+        
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="../bootstrap/bootstrap.bundle.min.js"></script>
+        <title>Sky Airlines</title>
+        <style>
+            @media screen and (max-width: 768px) {
+                h3 {
+                    font-size: 18px; 
+                }
+            }
+            @media screen and (max-width: 768px) {
+                #mapImage {
+                    max-width: 100%; 
+                    height: auto;
+                }
+            }
+        </style>
+    </head>
+    
+    <body>
+        <!-- Container for the logo -->
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <img src="../images/logoImages/skyAirlinesLogo.png" alt="Sky Airlines Logo" class="logo" id="logoImage">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Container for the navigation bar -->
+        <div class="container">
+          <div class="topnav">
+            <a class="active" href="homepage.html">Home</a>
+            <a href="flights.html">Flights</a>
+            <a href="signUp.html">Sign-up</a>
+            <a href="signIn.html">Sign-in</a>
+            <div id="app">
+                <button class="btn btn-dark col-2" style="float: right; margin-right: 20px;" id="darkModeButton" @click="toggleDarkMode">Dark Mode</button>
+            </div>
+          </div>
+        </div>
+        <!-- Container for the welcome message -->
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div>
+                        <h3>Welcome to Sky Airlines! Travel with ease and embark on new adventures with us!</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Container for map -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md">
+                    <h3>Explore the map</h3>
+                    <img id="mapImage" src="../images/countryMaps/europeMap.PNG" alt="Clickable Map" usemap="#map">
+                    <map name="map">
+                        <area id="France" alt="France" title="France" href="flights.html" coords="125,139,173,119,227,99,304,149,276,199,287,257,236,257,218,277,156,252" shape="poly">
+                        <area id="Germany" alt="Germany" title="Germany" href="flights.html" coords="280,95,306,166,379,158,362,126,390,93,378,34,321,26" shape="poly">
+                        <area id="Italy" alt="Italy" title="Italy" href="flights.html" coords="362,193,284,217,297,350,418,393,465,321" shape="poly">
+                        <area id="Greece" alt="Greece" title="Greece" href="flights.html" coords="589,271,503,296,484,329,570,407,604,410,643,375" shape="poly">
+                        <area id="Spain" alt="Spain" title="Spain" href="flights.html" coords="223,280,51,217,40,249,71,272,42,347,64,391,242,349" shape="poly">
+                        <area id="Belgium" alt="Belgium" title="Belgium" href="flights.html" coords="234,96,271,130,279,111,262,91" shape="poly">
+                    </map>   
+                </div>
+                <div class="col-md">
+                    <div class="hidden-info" id="additionalInfo" style="margin: 20px;">
+                        <img id="infoImage" class="rounded mx-auto d-block" src="" alt="" style="width: 50%; height: auto;" >
+                        <p id="infoDescription"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Darkmode -->
+        <script>
+            $(document).ready(function() {
+                var isDarkMode = false;
+        
+                function toggleDarkMode() {
+                    isDarkMode = !isDarkMode;
+                    $('body').toggleClass('dark-mode', isDarkMode);
+                    $('#logoImage').attr('src', isDarkMode ? '../images/logoImages/skyAirlinesLogoDark.png' : '../images/logoImages/skyAirlinesLogo.png');
+                    localStorage.setItem('darkMode', isDarkMode);
+                }
+        
+                $('#darkModeButton').click(function() {
+                    toggleDarkMode();
+                });
+        
+                var storedDarkMode = localStorage.getItem('darkMode');
+                if (storedDarkMode !== null) {
+                    isDarkMode = storedDarkMode === 'true';
+                    $('body').toggleClass('dark-mode', isDarkMode);
+                    $('#logoImage').attr('src', isDarkMode ? '../images/logoImages/skyAirlinesLogoDark.png' : '../images/logoImages/skyAirlinesLogo.png');
+                }
+            
+                $('area').hover(function() {
+                    const countryId = $(this).attr('id');
+                    const countryData = getCountryData(countryId); // Define this function to return image URL and description
+                    $('#infoImage').attr('src', countryData.imageUrl);
+                    $('#infoDescription').text(countryData.description);
+                    $('#additionalInfo').show();
+                    
+                    $('#mapImage').attr('src', countryData.changedMapUrl);
+                }, function() {
+                    $('#additionalInfo').hide();
+                    $('#mapImage').attr('src', '../images/countryMaps/europeMap.PNG');
+                }),
+                $('area').click(function() {
+                
+                    sessionStorage.setItem("selectedCountry", $(this).attr('id'));
+                });
+                function getCountryData(countryId) {
+                    // Define data for each country
+                    const countryData = {
+                        "France": {
+                            changedMapUrl: "../images/countryMaps/franceHover.png",
+                            imageUrl: "../images/wordGameImages/eiffeltower.jpg",
+                            description: "The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France. Constructed from 1887, it is named after the engineer Gustave Eiffel, whose company designed and built the tower."
+                        },
+                        "Germany": {
+                            changedMapUrl: "../images/countryMaps/germanyHover.png",
+                            imageUrl: "../images/wordGameImages/pylhbrademboyrgoy.jpg",
+                            description: "The Brandenburg Gate is an 18th-century neoclassical monument in Berlin, built on the orders of Prussian king Frederick William II after restoring the Orangist power by suppressing the Dutch popular unrest."
+                        },
+                        "Greece": {
+                            changedMapUrl: "../images/countryMaps/greeceHover.png",
+                            imageUrl: "../images/wordGameImages/parthenonas.jpg",
+                            description: "The Parthenon is a former temple on the Athenian Acropolis, Greece, that was dedicated to the goddess Athena during the fifth century BC."
+                        },
+                        "Spain": {
+                            changedMapUrl: "../images/countryMaps/spainHover.png",
+                            imageUrl: "../images/wordGameImages/royalPalace.jpg",
+                            description: "The Royal Palace of Madrid is the official residence of the Spanish royal family at the city of Madrid, although now used only for state ceremonies. The palace has 135,000 m2 (1,450,000 sq ft) of floor space and contains 3,418 rooms. It is the largest royal palace in Europe."
+                        },
+                        "Italy": {
+                            changedMapUrl: "../images/countryMaps/italyHover.png",
+                            imageUrl: "../images/wordGameImages/kolossaio.jpg",
+                            description: "The Colosseum is an elliptical amphitheatre in the centre of the city of Rome, Italy, just east of the Roman Forum. It is the largest ancient amphitheatre ever built, and is still the largest standing amphitheatre in the world, despite its age."
+                        },
+                        "Belgium": {
+                            changedMapUrl: "../images/countryMaps/belgiumHover.png",
+                            imageUrl: "../images/wordGameImages/grandPlace.jpg",
+                            description: "The Grand-Place or Grote Markt is the central square of Brussels, Belgium. The square measures 68 by 110 metres (223 by 361 ft) and is entirely paved."
+                        }
+                        
+                    };
+                    
+                    return countryData[countryId];
+                }
+            }); 
+          
+        </script>
+    </body>
+
+    <footer>
+        <div class="container">
+            &copy;SkyAirlines.
+            All rights reserved.
+        </div>
+    </footer>
+</html>

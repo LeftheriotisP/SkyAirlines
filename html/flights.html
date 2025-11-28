@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+        <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/style.css">
+        
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+        <script src="../bootstrap/bootstrap.bundle.min.js"></script>
+        <title>Sky Airlines</title>
+    </head>
+    
+    <body>
+        <!-- Container for the logo -->
+        <div class="container">
+            <div class="row">
+                <div class="col" id="darkModeApp">
+                    <img src="../images/logoImages/skyAirlinesLogo.png" alt="Sky Airlines Logo" class="logo" id="logoImage">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Container for the navigation bar -->
+        <div class="container">
+          <div class="topnav">
+              <a href="homepage.html">Home</a>
+              <a class="active" href="flights.html">Flights</a>
+              <a href="signUp.html">Sign-up</a>
+              <a href="signIn.html">Sign-in</a>
+              <div id="app" style="display: none;"></div>
+          </div>
+        </div>
+
+        <div class="container">
+            <h2>Available Flights:</h2>
+            <p>You need to <a href="signUp.html">Sign-up</a> to reserve your ticket.<br>Already have an account? <a href="signIn.html">Sign-in</a> instead.</p>
+            <div class="row">
+                <div class="col">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search by destination country">
+                </div>
+            </div>
+            <div class="row" id="flightsContainer"><!--Available Flights--></div>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                //Darkmode
+                new Vue({
+                    el: '#darkModeApp',
+                    data: {
+                        isDarkMode: false
+                    },
+                    methods: {
+                        toggleDarkMode() {
+                            this.isDarkMode = !this.isDarkMode;                            
+                            document.body.classList.toggle('dark-mode', this.isDarkMode);
+                            this.changeLogoImage();
+                            localStorage.setItem('darkMode', this.isDarkMode);
+                        },
+                        changeLogoImage() {
+                            const logoImage = document.getElementById('logoImage');
+                            if (this.isDarkMode) {
+                                logoImage.src = '../images/logoImages/skyAirlinesLogoDark.png';
+                            } else {
+                                logoImage.src = '../images/logoImages/skyAirlinesLogo.png';
+                            }
+                        },
+                    },
+                    mounted() {
+                        // Check if user has selected darkmode
+                        const storedDarkMode = localStorage.getItem('darkMode');
+                        if (storedDarkMode !== null) {
+                            this.isDarkMode = storedDarkMode === 'true';
+                            document.body.classList.toggle('dark-mode', this.isDarkMode);
+                            this.changeLogoImage();
+                        }
+                    }
+                });
+
+                const flightsContainer = $("#flightsContainer");
+                const searchInput = $("#searchInput");
+
+                function fetchAndDisplayFlights(searchTerm = "") {
+                    $.ajax({
+                        url: "http://localhost:3000/flights/upcoming",
+                        method: "GET",
+                        success: function(flights) {
+                            flightsContainer.empty(); 
+
+                            $.each(flights, function(index, flight) {
+                                if (searchTerm === "" || flight.destinationCountry.toLowerCase().includes(searchTerm.toLowerCase())) {
+                                    const departureDate = new Date(flight.departureDate).toISOString().slice(0, 16);
+
+                                    const flightCard = $("<div>").addClass("col-sm-6 mb-3 mb-sm-0");
+                                    flightCard.append(
+                                        $("<div>").addClass("card").append(
+                                            $("<div>").addClass("card-body").append(
+                                                $("<h5>").addClass("card-title").text(flight.destinationCountry),
+                                                $("<p>").addClass("card-text").text("Departure Date: " + departureDate),
+                                                $("<p>").addClass("card-text").text("Departure Airport: " + flight.departureAirport),
+                                                $("<p>").addClass("card-text").text("Arrival Airport: " + flight.arrivalAirport)
+                                            )
+                                        )
+                                    );
+
+                                    flightsContainer.append(flightCard);
+                                }
+                            });
+                        },
+                        error: function(error) {
+                            console.error("Error fetching flight data:", error);
+                        }
+                    });
+                }
+
+                searchInput.on("input", function() {
+                    fetchAndDisplayFlights(searchInput.val());
+                });
+
+                fetchAndDisplayFlights();
+            });
+        </script>
+
+    </body>
+
+    <footer>
+        <div class="container">
+            &copy;SkyAirlines.
+            All rights reserved.
+        </div>
+    </footer>
+</html>

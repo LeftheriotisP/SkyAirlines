@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+        <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/style.css">
+        
+        <script src="../bootstrap/bootstrap.bundle.min.js"></script>
+        <script src="../js/script.js"></script> 
+        <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+        <title>Sky Airlines</title>
+    </head>
+    
+    <body>
+        <!-- Container for the logo -->
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <img src="../images/logoImages/skyAirlinesLogo.png" alt="Sky Airlines Logo" class="logo" id="logoImage">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Container for the navigation bar -->
+        <div class="container">
+          <div class="topnav">
+              <a href="user_homepage.html">Home</a>
+              <a class="active" href="user_transaction.html">Tickets</a>
+              <a href="user_ticketHistory.html">Ticket History</a>
+              <a href="wordGame.html">Word Game</a>
+              <a href="#" onclick="signOut()">Sign-Out</a>
+          </div>
+        </div>
+
+        <!-- container for radio buttons and flight dates -->
+        <div class="container">
+            <h2>Select your flight options:</h2>
+            <!-- Dropdown for selecting the destination country -->
+            <div class="row row-spacing">
+                <div class="col-md-6">
+                    <label for="departureCountry"><h5>Select Departure Country:</h5></label>
+                </div>
+                <div class="row row-spacing">
+                    <div class="col-md-6">
+                        <select id="departureCountry" class="form-control">
+                            <option value="" disabled selected>Select Country</option>
+                            <option value="Greece">Greece</option>
+                            <option value="Germany">Germany</option>
+                            <option value="Italy">Italy</option>
+                            <option value="Spain">Spain</option>
+                            <option value="France">France</option>
+                            <option value="Belgium">Belgium</option>
+                        </select>
+                    </div>
+                </div> 
+                
+                <!-- image of selected country from homepage -->
+                <div class="row row-spacing">
+                    <div class id="app">
+                        <img :src="selectedCountryImage" alt="">
+                    </div>
+                </div>
+                
+            <!-- Message and links -->
+            <div class="row row-spacing">
+                <div class="col">
+                    <p>If you want to select another destination, please <a href="user_homepage.html">click here</a> or go to homepage.</p>
+                </div>
+            </div>
+            <!-- Radio buttons for travel type -->
+            <div class="row row-spacing">
+                <div class="col">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="travelType" id="oneWay" value="oneWay" checked>
+                        <label class="form-check-label" for="oneWay"><h5>One Way</h5></label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="travelType" id="roundTrip" value="roundTrip">
+                        <label class="form-check-label" for="roundTrip"><h5>Round Trip</h5></label>
+                    </div>
+                </div>
+            </div>
+            <!-- Date input fields for travel -->
+            <div class="row" id="dateFields">
+                <div class="col-md-3">
+                    <label for="departureDate"><h5>Departure Date:</h5></label>
+                    <input type="date" id="departureDate" class="form-control" min="2023-01-01" max="2023-12-31">
+                    <small id="departureDateError" class="text-danger"></small>
+                </div>
+                <div class="col-md-3" id="returnDateField" style="display: none;">
+                    <label for="returnDate"><h5>Return Date:</h5></label>
+                    <input type="date" id="returnDate" class="form-control" min="2023-01-01" max="2023-12-31">
+                    <small id="returnDateError" class="text-danger"></small>
+                </div>
+            </div>
+            <!-- Dropdown for selecting the number of passengers -->
+            <div class="row row-spacing">
+                <div class="col-md-6">
+                    <label for="passengerCount"><h5>Number of Passengers:</h5></label>
+                </div>
+                <div class="row row-spacing">
+                    <div class="col-md-1">
+                        <select id="passengerCount" class="form-control">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button id="passengerFields" type="button" class="btn btn-primary">Enter passenger info</button>
+                    </div>
+                </div>  
+                <div class="container" id="infoFormsContainer" style="display: none;">
+                    <!-- forms for passengers -->
+                </div>   
+                <!-- Flights container -->
+                <div class="container">
+                    <div class="row row-spacing">
+                        <button id="flightsBtn" type="button" class="btn btn-primary" style="display: none;">Show Available Flights</button>
+                    </div>
+                    <div class="row row-spacing" id="flightsContainer">
+                        <!-- Available Flights -->
+                    </div>
+                    <div class="row row-spacing">
+                        <button id="seatsBtn" type="button" class="btn btn-primary" style="display: none;" onclick="handlePassengerCountChange(); fetchSeatPrice();" >Select seats</button>
+                    </div>
+                </div>
+                <div class="container" id="seatSelectionContainer" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="../images/airplaneSeats.PNG" alt="Seat Layout Image">
+                            
+                        </div>
+                    </div>
+                    <div class="row">        
+                        <div id="seatDropdownContainer">
+                            <!-- seat dropdown -->
+                        </div>
+                           
+                    </div>
+                    <div class="row row-spacing">
+                        <!-- discount code -->
+                        <div class="col-md-6">
+                            <label for="discountCode">Discount Code:</label>
+                            <input type="text" id="discountCode" class="form-control" placeholder="Enter discount code" maxlength ="8">
+                            <small id="discountCodeError" class="text-danger"></small>
+                        </div>
+                        <!-- total price -->
+                        <div class="col-md-6">
+                            <label for="totalPrice">Total Price:</label>
+                            <input type="text" id="totalPrice" class="form-control" readonly>
+                        </div>
+                        <div>
+                            <button id="paymentBtn" type="button" class="btn btn-primary">Continue with payment</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="container" id="paymentContainer" style="display: none;">
+                    <!-- email field -->
+                    <div class="col-md-6">
+                        <label for="email"><h4>Email:</h4></label>
+                        <input type="text" id="email" class="form-control" required>
+                    </div>
+                    <!-- Radio buttons for card type -->
+                    <div class="row row-spacing">
+                        <div class="col">
+                            <label><h4>Card Type:</h4></label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cardType" id="visa" value="visa">
+                                <label class="form-check-label" for="visa"><h5>Visa</h5></label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cardType" id="mastercard" value="mastercard">
+                                <label class="form-check-label" for="mastercard"><h5>Mastercard</h5></label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cardType" id="americanExpress" value="americanExpress">
+                                <label class="form-check-label" for="americanExpress"><h5>American Express</h5></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="cardDigits"><h4>Card digits:</h4></label>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input type="text" id="cardDigits1" class="form-control" maxlength="4" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" id="cardDigits2" class="form-control" maxlength="4" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" id="cardDigits3" class="form-control" maxlength="4" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" id="cardDigits4" class="form-control" maxlength="4" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <h4 id="randomNumber"></h4> <!-- Element to display the generated number -->
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" id="userInput" class="form-control" maxlength="5" required>
+                        </div>
+                        <div class="col">
+                            <div id="error-message" style="color: red; margin-top: 10px;"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button id="checkoutBtn" type="button" class="btn btn-primary" disabled>Check out</button>
+                    </div>
+                    <div class="row" id="loadingMsg" style="display: none;">
+                        <h4>We are processing your request, please wait...</h4>
+                    </div>
+                </div>
+                    
+            </div>
+
+        </div>
+
+            <script>
+                new Vue({
+                    el: '#app',
+                    data: {
+                        selectedCountry: '',
+                        countryImages: {
+                            France: '../images/countryMaps/France.PNG',
+                            Germany: '../images/countryMaps/Germany.PNG',
+                            Italy: '../images/countryMaps/Italy.PNG',
+                            Greece: '../images/countryMaps/Greece.PNG',
+                            Spain: '../images/countryMaps/Spain.PNG',
+                            Belgium: '../images/countryMaps/Belgium.PNG'
+                        },
+                        isDarkMode: false
+                    },
+                    computed: {
+                        selectedCountryImage() {
+                            return this.countryImages[this.selectedCountry] || '';
+                        }
+                    },
+                    methods: {
+                        toggleDarkMode() {
+                            this.isDarkMode = !this.isDarkMode;
+                            document.body.classList.toggle('dark-mode', this.isDarkMode);
+                            localStorage.setItem('darkMode', this.isDarkMode);
+
+                            // Change logo based on dark mode state
+                            const logoImage = document.querySelector('#logoImage');
+                            logoImage.src = this.isDarkMode ? '../images/logoImages/skyAirlinesLogoDark.png' : '../images/logoImages/skyAirlinesLogo.png';
+                        }
+                    },
+                    created() {
+                        const storedDarkMode = localStorage.getItem('darkMode');
+                        if (storedDarkMode !== null) {
+                            this.isDarkMode = storedDarkMode === 'true';
+                            document.body.classList.toggle('dark-mode', this.isDarkMode);
+
+                            // Update logo based on dark mode state
+                            const logoImage = document.querySelector('#logoImage');
+                            logoImage.src = this.isDarkMode ? '../images/logoImages/skyAirlinesLogoDark.png' : '../images/logoImages/skyAirlinesLogo.png';
+                        }
+
+                        const selectedCountry = sessionStorage.getItem('selectedCountry');
+                        this.selectedCountry = selectedCountry || '';
+                    }
+                });
+                   
+                // country image
+                const emailInput = document.getElementById('email');
+                const cardTypeInputs = document.querySelectorAll('input[name="cardType"]');
+                const cardDigitsInputs = document.querySelectorAll('#cardDigits');
+                const paymentContainer = document.getElementById('paymentContainer');
+                
+                // Generate a new UUID
+                const uniqueId = uuidv4();
+                console.log("this is uuid:", uniqueId);
+                const uniqueTransaction = uniqueId;
+                
+                const visaRadioButton = document.getElementById('visa');
+                const mastercardRadioButton = document.getElementById('mastercard');
+                const americanExpressRadioButton = document.getElementById('americanExpress');
+                const paymentBtn = document.getElementById('paymentBtn');
+                const discountCodeInput = document.getElementById('discountCode');
+                
+                
+                visaRadioButton.addEventListener('change', handleCardTypeChange);
+                mastercardRadioButton.addEventListener('change', handleCardTypeChange);
+                americanExpressRadioButton.addEventListener('change', handleCardTypeChange);
+
+                
+                let selectedCardType;
+                function handleCardTypeChange(event) {
+                    selectedCardType = event.target.value;
+                }
+
+                // Function to check if all input fields are filled
+                function arePaymentFieldsFilled() {
+                    const isEmailFilled = emailInput.value.trim() !== '';
+                    const isCardTypeSelected = Array.from(cardTypeInputs).some(input => input.checked);
+                    const areCardDigitsFilled = Array.from(document.querySelectorAll('input[id^="cardDigits"]')).every(input => input.value.trim() !== '');
+
+                    return isEmailFilled && isCardTypeSelected && areCardDigitsFilled;
+                }
+
+                //array with passenger information
+                const passengerDetails = [];
+                //Random 5 digit generator
+                const randomNumberElement = document.getElementById('randomNumber');
+                const userInputElement = document.getElementById('userInput');
+            
+                function generateRandom5DigitNumber() {
+                    const min = 10000; // Minimum 5-digit number 
+                    const max = 99999; // Maximum 5-digit number 
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                }
+                
+                const generatedNumber = generateRandom5DigitNumber();
+                randomNumberElement.textContent = `Generated Number: ${generatedNumber}`;
+
+                // Listen for user input
+                userInputElement.addEventListener('input', () => {
+                    const userInput = userInputElement.value;             
+                    if (userInput !== generatedNumber.toString()) {
+                        const errorMessage = document.getElementById('error-message');  
+                        errorMessage.textContent = 'Not a match.';
+                        checkoutBtn.disabled = true;
+                    }else{
+                        const errorMessage = document.getElementById('error-message');  
+                        errorMessage.textContent = '';
+                        checkoutBtn.disabled = false;
+                    }
+                });
+
+                const checkoutButton = document.getElementById('checkoutBtn');
+                checkoutButton.addEventListener('click', () => {
+                    if (arePaymentFieldsFilled()) {
+                        createTicket();
+                        loadingMsg.style.display = 'block';
+                    } else {
+                        alert('Please fill in all the required payment information.');
+                    }
+                });
+
+                const selectedSeats = {};
+                const totalPriceInput = document.getElementById('totalPrice');
+                
+                let businessticketPrice;
+                let economyticketPrice;
+                
+                function fetchSeatPrice(){
+                    const flightId = sessionStorage.getItem('selectedOutboundFlightId');
+                    try {
+                        fetch(`http://localhost:3000/flights/ticketPrice/${flightId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            businessticketPrice = data.businessticketPrice;
+                            economyticketPrice = data.economyticketPrice;
+                            
+                            console.log('Business Class Ticket Price:', businessticketPrice);
+                            console.log('Economy Class Ticket Price:', economyticketPrice);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                }
+                // Function to fetch available seats and populate the dropdown list
+                let totalPrice = 0;
+                let hasDiscount = false;
+                discountCodeInput.addEventListener('input', (event) => {
+                    const input = event.target.value;
+                    const userId = sessionStorage.getItem('userId');
+                    const discountCode = document.getElementById('discountCode').value;
+                    
+                    if(input.length === 8 && !hasDiscount) {
+                        fetch (`http://localhost:3000/users/checkDiscountCode/${userId}/${discountCode}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data.isValid){
+                                hasDiscount = true;
+                                totalPrice = calculateTotalPrice(true);
+                                totalPriceInput.value = totalPrice + " " + "€";
+                                
+                            }else{
+                                discountCodeError.textContent = "Discount code is invalid";
+                            }
+                        })
+                        .catch(error => { 
+                            console.error('Error:', error);
+                        });
+                    }else{
+                        discountCodeError.textContent = "";
+                    }
+                })
+                const discountCodeError = document.getElementById('discountCodeError');
+                function fetchAvailableSeatsAndPopulateDropdown(dropdownId) {
+                    const seatDropdown = document.getElementById(dropdownId);
+                    try {
+                        const flightId = sessionStorage.getItem('selectedOutboundFlightId');
+                        console.log("this is flightId", flightId);
+                        fetch(`http://localhost:3000/flights/unreservedSeats/${flightId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                
+                                seatDropdown.innerHTML = '';
+
+                                // Add the "Select a seat" option as the default disabled option
+                                const defaultOption = document.createElement('option');
+                                defaultOption.disabled = true;
+                                defaultOption.selected = true;
+                                defaultOption.value = '';
+                                defaultOption.textContent = 'Select a seat';
+                                seatDropdown.appendChild(defaultOption);
+
+                                data.forEach(seat => {
+                                    const option = document.createElement('option');
+                                    option.value = `${seat.seatNumber},${seat.seatType}`;
+                                    option.textContent = `${seat.seatNumber} (${seat.seatType})`;
+                                    seatDropdown.appendChild(option);
+                                });
+                            })
+                            .catch(error => { 
+                                console.error('Error:', error);
+                            });
+
+                            // Event listener to the seat dropdown to track seat selection into array  
+                            seatDropdown.addEventListener('change', (event) => {
+                                const selectedValue = event.target.value;
+                                const [selectedSeatNumber, selectedSeatType] = selectedValue.split(',');
+                                const passengerIndex = parseInt(dropdownId.replace('seatDropdown', '')) - 1;
+                                const seatPrice = selectedSeatType === 'business' ? businessticketPrice : economyticketPrice;
+                                
+                                // Update selectedSeats object with the selected seat for the corresponding passenger
+                                selectedSeats[passengerIndex] = {
+                                    seatNumber: selectedSeatNumber,
+                                    seatType: selectedSeatType,
+                                    seatPrice: seatPrice
+                                };
+                                console.log("Selected Seats:", selectedSeats);
+                                // Calculate and update the total price
+                                totalPrice = calculateTotalPrice(false);
+                                console.log("Total Price:", totalPrice);
+                                // Update the total price input field
+                                totalPriceInput.value = totalPrice + " " + "€";
+                            });
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                }
+                
+                function calculateTotalPrice(applyDiscount) {
+                    const passengerCount = parseInt(document.getElementById('passengerCount').value);
+                    if (!applyDiscount){
+                        console.log('Not discount..');
+                        totalPrice = 0;
+                        for (const passengerIndex in selectedSeats) {
+                            if (selectedSeats.hasOwnProperty(passengerIndex)) {
+                                totalPrice += selectedSeats[passengerIndex].seatPrice;
+                            }
+                        }
+                        if (document.getElementById('roundTrip').checked){
+                            totalPrice *= 2;
+                        }
+                        return totalPrice;
+                       
+                    }else{
+                        console.log('Calculating discount...');
+                        if (document.getElementById('roundTrip').checked){
+                            totalPrice -= 10 * passengerCount *2;
+                            return totalPrice;
+                        }else{                            
+                            totalPrice -= 10 * passengerCount;
+                            return totalPrice;
+                        }
+                    }
+                }
+
+                function handlePassengerCountChange() {
+                    const passengerCount = parseInt(document.getElementById('passengerCount').value);
+                    const seatDropdownContainer = document.getElementById('seatDropdownContainer');
+                    seatDropdownContainer.innerHTML = ''; // Clear previous content
+
+                    for (let i = 1; i <= passengerCount; i++) {
+                        const seatDropdownDiv = document.createElement('div');
+                        seatDropdownDiv.className = 'col-md-6';
+
+                        const label = document.createElement('label');
+                        label.setAttribute('for', `seatDropdown${i}`);
+                        label.textContent = `Select an available seat for Passenger ${i}:`;
+
+                        const select = document.createElement('select');
+                        select.id = `seatDropdown${i}`;
+
+                        seatDropdownDiv.appendChild(label);
+                        seatDropdownDiv.appendChild(select);
+                        seatDropdownContainer.appendChild(seatDropdownDiv);
+
+                        fetchAvailableSeatsAndPopulateDropdown(`seatDropdown${i}`);
+                      
+                    }
+                }
+                
+                // Display/hide return date input field based on radio button selection
+                const oneWayRadio = document.getElementById("oneWay");
+                const roundTripRadio = document.getElementById("roundTrip");
+                const returnDateField = document.getElementById("returnDateField");
+            
+                oneWayRadio.addEventListener("change", () => {
+                    returnDateField.style.display = "none";
+                });
+            
+                roundTripRadio.addEventListener("change", () => {
+                    returnDateField.style.display = "block";
+                });
+        
+
+                const passengerCountSelect = document.getElementById("passengerCount");
+                const passengerFields = document.getElementById("passengerFields");
+                const infoFormsContainer = document.getElementById("infoFormsContainer");
+                const formInputs = document.querySelectorAll("#departureDate, #returnDate, #passengerFields, #passengerCount, #oneWay, #roundTrip, #departureCountry");
+               
+                const departureDateInput = document.getElementById("departureDate");
+                const departureDateError = document.getElementById("departureDateError");
+                const returnDateInput = document.getElementById("returnDate");
+                const returnDateError = document.getElementById("returnDateError");
+                
+                departureDateInput.addEventListener("change", () => {
+                    const currentDate = new Date();
+                    const departureDate = new Date(departureDateInput.value);
+                    
+                    if (departureDate < currentDate) {
+                        departureDateError.textContent = "Departure date cannot be before current date";
+                        departureDateInput.classList.add("is-invalid"); 
+                        passengerFields.disabled = true; // Disable the info button
+                    } else {
+                        departureDateError.textContent = "";
+                        departureDateInput.classList.remove("is-invalid");
+                        passengerFields.disabled = false; // Enable the info button
+                    }
+                });
+                //eventlistener for dates
+                returnDateInput.addEventListener("change", () => {
+                   const departureDate = new Date(departureDateInput.value);
+                    const returnDate = new Date(returnDateInput.value);
+                
+                    if (returnDate < departureDate) {
+                        returnDateError.textContent = "Return date cannot be before departure date";
+                        returnDateInput.classList.add("is-invalid"); 
+                        passengerFields.disabled = true; // Disable the info button
+                    } else {
+                        returnDateError.textContent = "";
+                        returnDateInput.classList.remove("is-invalid");
+                        passengerFields.disabled = false; // Enable the info button
+                    }
+                });
+
+                //On button disable previous fields and show passenger fields
+                passengerFields.addEventListener("click", () => {
+                    // Disable input fields and buttons
+                    formInputs.forEach(input => {
+                        input.disabled = true;
+                    });
+                    // Show the information forms and submit button
+                    infoFormsContainer.style.display = "block";
+                    flightsBtn.style.display = "block";
+                    // Create passenger forms
+                    const passengerCount = passengerCountSelect.value;
+
+                    for (let i = 1; i <= passengerCount; i++) {
+                        const form = document.createElement("form");
+                        form.setAttribute("id", `passengerForm-${i}`);
+                        form.innerHTML = `
+                        <div class="col-md-4 mb-3">
+                            <h4>Passenger ${i}:</h4>
+                            <label for="firstname-${i}" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstname-${i}" name="firstname" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="lastname-${i}" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastname-${i}" name="lastname" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="birthDate-${i}" class="form-label">Date of Birth</label>
+                            <input type="date" class="form-control" id="birthDate-${i}" name="birthDate" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="idNumber-${i}" class="form-label">Identification Number</label>
+                            <input type="text" class="form-control" id="idNumber-${i}" name="idNumber" required>
+                        </div>
+                        `;
+                        infoFormsContainer.appendChild(form);
+                    }
+                   
+                   
+                    
+                });
+                function validatePassengerForms() {
+                    const passengerForms = document.querySelectorAll('[id^="passengerForm-"]');
+
+                    for (const form of passengerForms) {
+                        const firstNameInput = form.querySelector('input[name="firstname"]');
+                        const lastNameInput = form.querySelector('input[name="lastname"]');
+                        const birthDateInput = form.querySelector('input[name="birthDate"]');
+                        const idNumberInput = form.querySelector('input[name="idNumber"]');
+
+                        if (
+                            !firstNameInput.value.trim() ||
+                            !lastNameInput.value.trim() ||
+                            !birthDateInput.value ||
+                            !idNumberInput.value.trim()
+                        ) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }   
+                //when show flights button is pressed
+                flightsBtn.addEventListener("click", () => {
+                        // Validate fields before continuing
+                        const isFieldsValid = validatePassengerForms();
+                        if (!isFieldsValid) {
+                            alert("Please fill in all the required fields.");
+                            return;
+                        }else{
+                            seatsBtn.style.display = "block";
+                            //get firstname from passengers forms
+                            const passengerCount = passengerCountSelect.value;
+                            for (let i = 1; i <= passengerCount; i++) {
+                                const passengerFormIndex = i;
+                                const firstNameInput = document.querySelector(`#passengerForm-${passengerFormIndex} input[name="firstname"]`);
+                                const lastNameInput = document.querySelector(`#passengerForm-${passengerFormIndex} input[name="lastname"]`);
+                                const birthDateInput = document.querySelector(`#passengerForm-${passengerFormIndex} input[name="birthDate"]`);
+                                const idNumberInput = document.querySelector(`#passengerForm-${passengerFormIndex} input[name="idNumber"]`);
+                                const passengerInfo = {
+                                    firstname: firstNameInput.value,
+                                    lastname: lastNameInput.value,
+                                    birthDate: birthDateInput.value,
+                                    idNumber: idNumberInput.value
+                                };
+                                passengerDetails.push(passengerInfo);
+                                console.log(`Passenger ${i} Info:`, passengerInfo);
+                            }
+                            showFlights();
+                        } 
+                })
+                
+              
+                async function createTicket(){
+                    const passengerCount = passengerCountSelect.value;
+
+                    const promises = [];
+                    const createdTickets = [];
+                    const flightInfo = [];
+                    console.log("Submiting ticket...");
+                    console.log("this is passengerCount", passengerCount);
+
+                    for (let i = 1; i <= passengerCount; i++){
+                        console.log("Looping...");
+                        const userId = sessionStorage.getItem('userId');
+                        const flightId = sessionStorage.getItem('selectedOutboundFlightId');
+                        
+                        const firstname = passengerDetails[i-1].firstname;
+                        const lastname = passengerDetails[i-1].lastname;
+                        const birthDate = passengerDetails[i-1].birthDate;
+                        const idNumber = passengerDetails[i-1].idNumber;
+                        const seatNumber = selectedSeats[i-1].seatNumber;
+                        const seatClass = selectedSeats[i-1].seatType;
+                        const ticketCost = selectedSeats[i-1].seatPrice;
+                        
+                        const ticketData = {
+                            userId: userId,
+                            flightId: flightId,
+                            uniqueTransaction: uniqueTransaction,
+                            firstname: firstname,
+                            lastname: lastname,
+                            birthDate: birthDate,
+                            idNumber: idNumber,
+                            seatNumber: seatNumber,
+                            seatClass: seatClass,
+                            ticketCost: ticketCost
+                        };
+                        console.log('this is ticketData:', i, ticketData);
+                    
+                        
+                        const ticketPromise = await fetch(`http://localhost:3000/tickets`,{
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(ticketData)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('ticket created:', data);
+                            createdTickets.push(data);
+                        })
+                        .catch(error => {
+                            console.error('Error creating ticket:', error);
+                        });
+                        
+                        promises.push(ticketPromise);
+                        if( i === 1 ){
+                            console.log('this is flightId:', flightId);
+                            const getFlight = await fetch(`http://localhost:3000/flights/getFlightById/${flightId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                flightInfo.push(data);
+                            })
+                            .catch(error => {
+                                console.error('Error creating ticket:', error);
+                            });
+                        }
+                    }
+                        if (document.getElementById('roundTrip').checked){
+                            for (let i = 1; i <= passengerCount; i++){
+                                console.log("Looping returnTicket...");
+                                const userId = sessionStorage.getItem('userId');          
+                                const firstname = passengerDetails[i-1].firstname;
+                                const lastname = passengerDetails[i-1].lastname;
+                                const birthDate = passengerDetails[i-1].birthDate;
+                                const idNumber = passengerDetails[i-1].idNumber;
+                                const seatNumber = selectedSeats[i-1].seatNumber;
+                                const seatClass = selectedSeats[i-1].seatType;
+                                const ticketCost = selectedSeats[i-1].seatPrice;
+                                const returnFlightId = sessionStorage.getItem('selectedInboundFlightId');  
+
+                                const returnTicketData = {
+                                    userId: userId,
+                                    flightId: returnFlightId,
+                                    uniqueTransaction: uniqueTransaction,
+                                    firstname: firstname,
+                                    lastname: lastname,
+                                    birthDate: birthDate,
+                                    idNumber: idNumber,
+                                    seatNumber: seatNumber,
+                                    seatClass: seatClass,
+                                    ticketCost: ticketCost
+                                };
+                                console.log('this is returnTicketData:', i, returnTicketData);
+                            
+                                
+                                const returnTicketPromise = await fetch(`http://localhost:3000/tickets`,{
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(returnTicketData)
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log('ticket created:', data);
+                                    createdTickets.push(data);
+                                    
+                                })
+                                .catch(error => {
+                                    console.error('Error creating ticket:', error);
+                                });
+
+                                promises.push(returnTicketPromise);
+                                if( i === 1 ){
+                                    console.log('this is flightId:', returnFlightId);
+                                    const getFlight = await fetch(`http://localhost:3000/flights/getFlightById/${returnFlightId}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        flightInfo.push(data);
+                                    })
+                                    .catch(error => {
+                                        console.error('Error creating ticket:', error);
+                                    });
+                                }
+                            }
+                        }
+                        try {
+                            const ticketResults = await Promise.all(promises);
+                            console.log('All tickets created:', ticketResults);
+
+                            //after tickets are created, fetch them
+                            const fetchedTickets = await getTickets();
+                            
+                            //then create the transaction
+                            await createTransaction(fetchedTickets);
+
+                            //then update the seats that were reserved
+                            await reserveSeats();
+
+                            //then send an email with the tickets to the user
+                            await sendTicketEmail(createdTickets, flightInfo);
+
+                            //then update the users discount
+                            if(hasDiscount){
+                                await deleteDiscountCode();
+                            }
+                            alert('Your tickets were reserved successfully!');
+                            window.location.href = 'user_homepage.html';
+                            
+                        } catch (error) {
+                            console.error('Error creating tickets:', error);
+                        }
+                        console.log("this is createdTickets array: ", createdTickets);
+                }
+                async function getTickets() {
+                    const userId = sessionStorage.getItem('userId');
+                    
+                    try {
+                        const response = await fetch(`http://localhost:3000/tickets/${userId}/${uniqueTransaction}`);
+                        const data = await response.json();
+                        
+                        console.log('Fetched tickets with userid and uniqueTransaction', data);
+                        
+                        return data;
+                    } catch (error) {
+                        console.error('Error fetching tickets:', error);
+                        throw error; 
+                    }
+                }
+                 
+                async function createTransaction(ticketData){
+                    console.log("Submiting transaction...");
+                    console.log("this is ticketData", ticketData);
+                    const cardDigit1Input = document.getElementById('cardDigits1');
+                    const cardDigit2Input = document.getElementById('cardDigits2');
+                    const cardDigit3Input = document.getElementById('cardDigits3');
+                    const cardDigit4Input = document.getElementById('cardDigits4');
+
+                    const cardNumber = cardDigit1Input.value + cardDigit2Input.value + cardDigit3Input.value + cardDigit4Input.value;
+                    console.log("this is cardNumber:", cardNumber);
+                    const userId = sessionStorage.getItem('userId');
+                    const totalCost = totalPrice;
+                    console.log("this is totalCost", totalCost);
+                    const transactionData = {
+                            userId: userId,
+                            ticketsIds: ticketData,
+                            uniqueTransaction: uniqueTransaction,
+                            totalCost: totalCost,
+                            discountCode: discountCodeInput.value,
+                            email: emailInput.value,
+                            cardNumber: cardNumber,
+                            cardType: selectedCardType
+                    };
+                    console.log("this is transactionData", transactionData);
+                    fetch(`http://localhost:3000/transactions`,{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(transactionData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('transaction created:', data);
+                        
+                        
+                    })
+                    .catch(error => {
+                        console.error('Error creating transaction:', error);
+                    });
+                }
+                async function sendTicketEmail(createdTickets, flightInfo){
+                    const emailData = {
+                        recipient: emailInput.value,
+                        subject: 'Sky Airlines Tickets',
+                        text: 'Here are your flight tickets!',
+                        htmlContent: await generateTicketHtmlContent(createdTickets, flightInfo)
+                    };
+                   
+                    fetch('http://localhost:3000/send-email', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(emailData)
+                    })
+                    .then(response => response.text())
+                    .then(data => console.log(data))
+                    .catch(error => console.error('Error sending email:', error));
+                }
+                async function generateTicketHtmlContent(tickets, flights) {
+                    let html = '<p>This is your tickets:</p>';
+
+                    tickets.forEach((ticket, index) => {
+                        
+                        html += `
+                            <p>Ticket ${index + 1}:</p>
+                            <ul>
+                                <li>Flight ID: ${ticket.flightId}</li>
+                                <li>Firstname: ${ticket.firstname}</li>
+                                <li>Lastname: ${ticket.lastname}</li>
+                                <li>Birth Date: ${new Date(ticket.birthDate).toLocaleDateString()}</li>
+                                <li>ID Number: ${ticket.idNumber}</li>
+                                <li>Seat Number: ${ticket.seatNumber}</li>
+                                <li>Seat Class: ${ticket.seatClass}</li>
+                                <li>Ticket Cost: ${ticket.ticketCost}</li>
+                            </ul>
+                        `;
+                    });
+                    flights.forEach((flight,index) => {
+                        html += `
+                            <p>Flight ${index + 1}:</p>
+                            <ul>
+                                <li>Flight ID: ${flight._id}</li>
+                                <li>Flight Date: ${new Date(flight.departureDate).toLocaleDateString()}</li>
+                                <li>Departure Country: ${flight.departureCountry}</li>
+                                <li>Destination Country: ${flight.destinationCountry}</li>
+                                <li>Departure Airport: ${flight.departureAirport}</li>
+                                <li>Arrival Airport: ${flight.arrivalAirport}</li>
+                            </ul>
+                        `;
+                    })
+
+                    return html;
+                }
+
+                async function deleteDiscountCode(){
+                    const userId = sessionStorage.getItem('userId');
+                    try {
+                        const response = await fetch(`http://localhost:3000/users/deleteDiscountCode/${userId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            console.log('Discount code deleted successfully:', data);
+                           
+                        } else {
+                            const errorData = await response.json();
+                            console.error('Error deleting discount code:', errorData.message);
+                        }
+                    } catch (error) {
+                        console.error('An error occurred while deleting discount code:', error);
+                    }
+                }
+                async function reserveSeats(){
+                    const flightId = sessionStorage.getItem('selectedOutboundFlightId');
+                    try {
+                        
+                        const response = await fetch(`http://localhost:3000/flights/reserveSeats`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ flightId }),
+                        });
+
+                        const data = await response.json();
+                        console.log(data.message); // Response from the server
+                        console.log("tickets reserved for outboundflight");
+                        
+                    } catch (error) {
+                        console.error('Error:', error);
+                        
+                    }  
+                    if (document.getElementById('roundTrip').checked) {
+                        const returnFlightId = sessionStorage.getItem('selectedInboundFlightId');
+                        try {
+                            const response = await fetch(`http://localhost:3000/flights/reserveSeats`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ flightId: returnFlightId }),
+                            });
+
+                            const data = await response.json();
+                            console.log(data.message); // Response from the server
+                            console.log("tickets reserved for inboundFlight");
+                        } catch (error) {
+                            console.error('Error:', error);
+
+                        }
+                    }
+                }
+
+                const seatsBtn = document.getElementById('seatsBtn');
+                const seatSelectionContainer = document.getElementById('seatSelectionContainer');
+
+                seatsBtn.addEventListener('click', () => {
+                    seatSelectionContainer.style.display = 'block';
+                    
+                });
+        
+                paymentBtn.addEventListener('click', () => {
+                    //Disable inputs
+                    discountCodeInput.disabled = true;
+                    totalPriceInput.disabled = true;
+
+                    // Disable seat selection container
+                    seatSelectionContainer.style.pointerEvents = 'none';
+
+                    // Display the payment container
+                    paymentContainer.style.display = 'block';
+                });
+                
+               
+                //show flight cards
+                function showFlights() {
+                    console.log('Loading flights...');
+                    const departureCountry = document.getElementById('departureCountry').value;
+                    const destinationCountry = sessionStorage.getItem('selectedCountry')
+                    const departureDate = document.getElementById('departureDate').value;
+                    const returnDate = document.getElementById('returnDate').value; 
+
+                    fetch(`http://localhost:3000/flights/${departureDate}/${destinationCountry}/${departureCountry}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Fetched flights:', data);
+
+                            const flightsContainer = document.getElementById('flightsContainer');
+                            flightsContainer.innerHTML = ''; // Clear previous content
+
+                            const outboundTitle = document.createElement('h5');
+                            outboundTitle.innerText = 'Outbound Flights';
+                            flightsContainer.appendChild(outboundTitle);
+
+                            data.forEach(flight => {
+                                createFlightCard(flightsContainer, flight, true);
+                            });
+
+                            if (document.getElementById('roundTrip').checked) {
+
+                                const inboundTitle = document.createElement('h5');
+                                inboundTitle.innerText = 'Inbound Flights';
+                                flightsContainer.appendChild(inboundTitle);
+                                
+                                // Fetch and display return flights
+                                fetch(`http://localhost:3000/flights/${returnDate}/${departureCountry}/${destinationCountry}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log('Fetched return flights:', data);
+                                        data.forEach(flight => {
+                                            createReturnFlightCard(flightsContainer, flight, false);
+                                        });
+                                    })
+                                    .catch(error => {
+                                        console.error('Error fetching return flights:', error);
+                                    });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching flights:', error);
+                        });
+                }
+
+                function createFlightCard(container, flight, isOutbound) {
+                    const card = document.createElement('div');
+                    card.className = 'col-sm-6';
+                    card.innerHTML = `
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">${flight.destinationCountry}</h5>
+                                <p class="card-text">
+                                    Departure Date: ${flight.departureDate}<br>
+                                    Departure Country: ${flight.departureCountry}<br>
+                                    Destination Country: ${flight.destinationCountry}
+                                </p>
+                                <button class="btn btn-primary book-flight" data-flight-id="${flight._id}" data-is-outbound="${isOutbound}">Book This</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+
+                    const bookButton = card.querySelector('.book-flight');
+                    bookButton.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        const flightId = event.target.getAttribute('data-flight-id');
+                        const isOutbound = event.target.getAttribute('data-is-outbound');
+                        sessionStorage.setItem('selectedOutboundFlightId', flightId);
+                        const message = document.createElement('div');
+                        
+                        // Hide only the outbound flights and title
+                        if (isOutbound === 'true') {
+                            const outboundTitle = document.querySelector('#flightsContainer h5');
+                            outboundTitle.style.display = 'none';
+
+                            const allOutboundCards = document.querySelectorAll('[data-is-outbound="true"]');
+                            allOutboundCards.forEach(card => {
+                                card.closest('.col-sm-6').style.display = 'none';
+                            });
+                        }
+                    });
+                }
+
+                function createReturnFlightCard(container, flight, isOutbound) {
+                    const card = document.createElement('div');
+                    card.className = 'col-sm-6';
+                    card.innerHTML = `
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">${flight.destinationCountry}</h5>
+                                <p class="card-text">
+                                    Departure Date: ${flight.departureDate}<br>
+                                    Departure Country: ${flight.departureCountry}<br>
+                                    Destination Country: ${flight.destinationCountry}
+                                </p>
+                                <button class="btn btn-primary book-flight" data-flight-id="${flight._id}" data-is-outbound="${isOutbound}">Book This</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                    
+                    const bookButton = card.querySelector('.book-flight');
+                    bookButton.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        const flightId = event.target.getAttribute('data-flight-id');
+                        const isOutbound = event.target.getAttribute('data-is-outbound');
+                        sessionStorage.setItem('selectedInboundFlightId', flightId);
+
+                        // Hide only the inbound flights and title
+                        if (isOutbound === 'false') {
+                            const inboundTitle = document.querySelector('#flightsContainer h5');
+                            inboundTitle.style.display = 'none';
+
+                            const allInboundCards = document.querySelectorAll('[data-is-outbound="false"]');
+                            allInboundCards.forEach(card => {
+                                card.closest('.col-sm-6').style.display = 'none';
+                            });
+                        }
+                    });
+                }
+            </script>
+    </body>
+
+    <footer>
+        <div class="container">
+            &copy;SkyAirlines.
+            All rights reserved.
+        </div>
+    </footer>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+        <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/style.css">
+        
+        <script src="../bootstrap/bootstrap.bundle.min.js"></script>
+        <script src="../js/script.js"></script> 
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+        <title>Sky Airlines</title>
+    </head>
+    
+    <body>
+        <!-- Container for the logo -->
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <img src="../images/logoImages/skyAirlinesLogo.png" alt="Sky Airlines Logo" class="logo" id="logoImage">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Container for the navigation bar -->
+        <div class="container">
+          <div class="topnav">
+              <a href="admin_homepage.html">Home</a>
+              <a href="admin_flights.html">Flight Administration</a>
+              <a class="active" href="admin_users.html">User Administration</a>
+              <a href="#" onclick="signOut()">Sign-Out</a>
+              <div id="app" style="display: none;"></div>
+          </div>
+        </div>
+        <!-- Total users number -->
+        <div class="container">
+            <h3>Total users: <span id="userCount">Loading...</span></h3>
+        </div>
+        <!-- create user container -->
+        <div class="container">
+            <h2>Create New User</h2>
+            <form id="createUser">
+                <div class="col-md-6">
+                    <label for="firstname">First Name:</label>
+                    <input type="text" id="firstname" name="firstname" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="lastname">Last Name:</label>
+                    <input type="text" id="lastname" name="lastname" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="tel">Telephone:</label>
+                    <input type="text" id="tel" name="tel" required><br>
+                </div>
+        
+                <button class="btn btn-green-rounded col-md-2" type="button" onclick="createUser()">Create User</button>
+            </form>
+        </div>
+        <!-- search user container -->
+        <div class="container">
+            <h2>Search users:</h2>
+            <form id="searchForm">
+                <div class="col-md-6">
+                    <label for="searchInput">To view all users search "user"</label>
+                    <input type="text" id="searchInput" name="searchInput" required>
+                </div>
+                <button type="button" class="btn btn-primary col-md-2" onclick="searchUsers()">Search</button>
+            </form>
+            <div id="results"></div>
+        </div>  
+        <!-- update user container -->
+        <div class="container">
+            <h2>Update user:</h2>
+            <h5>Please fill the user's ID and then the fields you want to change</h5>
+            <form id="updateUser">
+                <div class="col-md-6">
+                    <label for="userId">User ID:</label>
+                    <input type="text" id="userId" name="userId" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="firstnameUpdate">First Name:</label>
+                    <input type="text" id="firstnameUpdate" name="firstnameUpdate" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="lastnameUpdate">Last Name:</label>
+                    <input type="text" id="lastnameUpdate" name="lastnameUpdate" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="telUpdate">Telephone:</label>
+                    <input type="text" id="telUpdate" name="telUpdate" required><br>
+                </div>
+        
+                <button class="btn btn-green-rounded col-md-2" type="button" onclick="updateUser()">Update User</button>
+            </form>
+        </div>
+        <!-- delete user container -->
+        <div class="container">
+            <h2>Delete User</h2>
+            <form id="deleteForm">
+                <div class="col-md-6">
+                    <label for="delete">Fill with user's ID:</label>
+                    <input type="text" id="delete" name="delete" required>
+                </div>
+                <button type="button" class="btn btn-danger col-md-2" onclick="deleteUser()">Delete User</button>
+            </form>
+        </div>
+        
+        <script>
+            // Darkmode
+            document.addEventListener("DOMContentLoaded", function() {
+                new Vue({
+                    el: '#app',
+                    data: {
+                        isDarkMode: false
+                    },
+                    methods: {
+                        toggleDarkMode() {
+                            this.isDarkMode = !this.isDarkMode;
+                            document.body.classList.toggle('dark-mode', this.isDarkMode);
+                            localStorage.setItem('darkMode', this.isDarkMode);
+
+                            // Change logo based on dark mode state
+                            const logoImage = document.querySelector('.logo');
+                            logoImage.src = this.isDarkMode ? '../images/logoImages/skyAirlinesLogoDark.png' : '../images/logoImages/skyAirlinesLogo.png';
+                        }
+                    },
+                    mounted() {
+                        // Check if user has selected dark mode
+                        const storedDarkMode = localStorage.getItem('darkMode');
+                        if (storedDarkMode !== null) {
+                            this.isDarkMode = storedDarkMode === 'true';
+                            document.body.classList.toggle('dark-mode', this.isDarkMode);
+
+                            // Update logo based on stored dark mode state
+                            const logoImage = document.querySelector('.logo');
+                            logoImage.src = this.isDarkMode ? '../images/logoImages/skyAirlinesLogoDark.png' : '../images/logoImages/skyAirlinesLogo.png';
+                        }
+                    }
+                });
+            });
+            // Fetch user count and update the content on the page
+            fetch(`http://localhost:3000/users/count/userCount`)
+            .then(response => response.json())
+            .then(data => {
+                const userCountElement = document.getElementById('userCount');
+                userCountElement.textContent = data.count;
+            })
+            .catch(error => {
+                console.error('Error fetching user count:', error);
+                const userCountElement = document.getElementById('userCount');
+                userCountElement.textContent = 'Error fetching user count';
+            });
+
+            //create user script
+            function createUser(){
+                console.log('Submitting sign up request...');
+
+                const firstname = document.getElementById('firstname').value;
+                const lastname = document.getElementById('lastname').value;
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                const tel = document.getElementById('tel').value;
+    
+                const userData = {
+                    firstname: firstname,
+                    lastname: lastname,
+                    username: username,
+                    password: password,
+                    tel: tel
+                };
+                
+                fetch('http://localhost:3000/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('User created:', data);
+                        window.location.href = 'admin_homepage.html';
+                        
+                    })
+                    .catch(error => {
+                        console.error('Error creating user:', error);
+                    });
+            }
+
+            // Search user script
+            function searchUsers() {
+                console.log('Searching users...');
+                const inputValue = document.getElementById('searchInput').value;
+                console.log('this is searchInput:', inputValue);
+
+                fetch(`http://localhost:3000/users/searchUsers/${inputValue}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const resultsDiv = document.getElementById('results');
+                        resultsDiv.innerHTML = '';
+
+                        if (data.length > 0) {
+                            const table = document.createElement('table');
+                            table.className = 'table';
+
+                            const thead = document.createElement('thead');
+                            const theadRow = document.createElement('tr');
+                            ['User Id', 'Firstname', 'Lastname', 'Username', 'Tel', 'Trait'].forEach(headerText => {
+                                const th = document.createElement('th');
+                                th.scope = 'col';
+                                th.textContent = headerText;
+                                theadRow.appendChild(th);
+                            });
+                            thead.appendChild(theadRow);
+                            table.appendChild(thead);
+
+                            const tbody = document.createElement('tbody');
+                            data.forEach(user => {
+                                const row = document.createElement('tr');
+                                const rowData = [user._id, user.firstname, user.lastname, user.username, user.tel, user.trait];
+                                rowData.forEach(cellData => {
+                                    const cell = document.createElement('td'); 
+                                    cell.textContent = cellData;
+                                    row.appendChild(cell);
+                                });
+                                tbody.appendChild(row);
+                            });
+                            table.appendChild(tbody);
+
+                            resultsDiv.appendChild(table);
+                        } else {
+                            resultsDiv.textContent = 'No users found.';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error searching users:', error);
+                    });
+            }
+
+            // Update user script
+            function updateUser() {
+                const userId = document.getElementById('userId').value;
+
+                // Get values from input fields
+                const firstname = document.getElementById('firstnameUpdate').value;
+                const lastname = document.getElementById('lastnameUpdate').value;
+                const tel = document.getElementById('telUpdate').value;
+
+                // Create an object to hold updated data
+                const updatedUserData = {};
+
+                // Add properties to the object only if fields are not empty
+                if (firstname) {
+                    updatedUserData.firstname = firstname;
+                }
+                if (lastname) {
+                    updatedUserData.lastname = lastname;
+                }
+                if (tel) {
+                    updatedUserData.tel = tel;
+                }
+
+                fetch(`http://localhost:3000/users/${userId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedUserData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('User updated:', data);
+                    
+                })
+                .catch(error => {
+                    // Handle error, e.g., display an error message
+                    console.error('Error updating user:', error);
+                });
+            }
+
+
+            //delete user script
+            function deleteUser() {
+                const userId = document.getElementById('delete').value;
+
+                // Show a confirmation prompt
+                const confirmed = window.confirm("Are you sure you want to delete this user?");
+                
+                if (confirmed) {
+                    fetch(`http://localhost:3000/users/deleteUser/${userId}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                       
+                        console.log('User deleted:', data);
+                    })
+                    .catch(error => {
+                       
+                        console.error('Error deleting user:', error);
+                    });
+                }
+            }
+
+        </script>
+
+    </body>
+
+    <footer>
+        <div class="container">
+            &copy;SkyAirlines.
+            All rights reserved.
+        </div>
+    </footer>
+</html>

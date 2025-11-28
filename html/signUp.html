@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+        <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/style.css">
+        
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+        <script src="../bootstrap/bootstrap.bundle.min.js"></script>
+        
+        <title>Sky Airlines</title>
+    </head>
+    
+    <body>
+        <!-- Container for the logo -->
+        <div class="container">
+            <div class="row">
+                <div class="col" id="darkModeApp">
+                    <img src="../images/logoImages/skyAirlinesLogo.png" alt="Sky Airlines Logo" class="logo" id="logoImage">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Container for the navigation bar -->
+        <div class="container">
+          <div class="topnav">
+              <a href="homepage.html">Home</a>
+              <a href="flights.html">Flights</a>
+              <a class="active" href="signUp.html">Sign-up</a>
+              <a href="signIn.html">Sign-in</a>
+              <div id="app" style="display: none;"></div>
+          </div>
+        </div>
+
+        <!-- Container for the sign up form -->
+        <div class="container">
+            <h1 style="border-bottom: 1px solid #ccc; padding-bottom: 10px;">Sign Up</h1>
+            <form>
+                <div class="col-md-6">
+                    <label for="firstname">First Name:</label>
+                    <input type="text" id="firstname" name="firstname" required><br>
+                </div>
+                
+                <div class="col-md-6">
+                    <label for="lastname">Last Name:</label>
+                    <input type="text" id="lastname" name="lastname" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="tel">Telephone:</label>
+                    <input type="text" id="tel" name="tel" required><br>
+                </div>
+        
+                <button class="btn-green-rounded col-md-2" type="button" id="signUpButton">Sign Up</button>
+            </form>
+        </div>
+        <!--Sign Up script-->
+        <script>
+            new Vue({
+                el: '#darkModeApp',
+                data: {
+                    isDarkMode: false
+                },
+                methods: {
+                    toggleDarkMode() {
+                        this.isDarkMode = !this.isDarkMode;                            
+                        document.body.classList.toggle('dark-mode', this.isDarkMode);
+                        this.changeLogoImage();
+                        localStorage.setItem('darkMode', this.isDarkMode);
+                    },
+                    changeLogoImage() {
+                        const logoImage = document.getElementById('logoImage');
+                        if (this.isDarkMode) {
+                            logoImage.src = '../images/logoImages/skyAirlinesLogoDark.png';
+                        } else {
+                            logoImage.src = '../images/logoImages/skyAirlinesLogo.png';
+                        }
+                    },
+                },
+                mounted() {
+                    // Check if user has selected darkmode
+                    const storedDarkMode = localStorage.getItem('darkMode');
+                    if (storedDarkMode !== null) {
+                        this.isDarkMode = storedDarkMode === 'true';
+                        document.body.classList.toggle('dark-mode', this.isDarkMode);
+                        this.changeLogoImage();
+                    }
+                }
+            });
+        
+            function signUp() {
+                console.log('Submitting sign up request...');
+
+                const firstname = $('#firstname').val();
+                const lastname = $('#lastname').val();
+                const username = $('#username').val();
+                const password = $('#password').val();
+                const tel = $('#tel').val();
+
+                const userData = {
+                    firstname: firstname,
+                    lastname: lastname,
+                    username: username,
+                    password: password,
+                    tel: tel
+                };
+
+                $.ajax({
+                    url: 'http://localhost:3000/users',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(userData),
+                    success: function(data) {
+                        console.log('User created:', data);
+                        signIn();
+                    },
+                    error: function(error) {
+                        console.error('Error creating user:', error);
+                    }
+                });
+            }
+        
+            function signIn() {
+                const username = $('#username').val();
+                const password = $('#password').val();
+    
+                const userData = {
+                    username: username,
+                    password: password  
+                };
+    
+                console.log("this is userData:", userData);
+    
+                $.ajax({
+                    url: 'http://localhost:3000/users/signin',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(userData),
+                    success: function(data) {
+                        sessionStorage.setItem('current_user', username);
+    
+                        sessionStorage.setItem('userId', data.userId);
+                        $.getJSON(`http://localhost:3000/users/trait/${username}`, function(traitData) {
+                            const trait = traitData.trait;
+                            sessionStorage.setItem('current_trait', trait);
+                            console.log('Current User:', sessionStorage.getItem('current_user'));
+                            console.log('Current Trait:', sessionStorage.getItem('current_trait'));
+    
+                            // Redirect to specified page depending on user trait
+                            window.location.href = data.redirect;
+                        });
+                    },
+                    error: function(error) {
+                        console.error('Error signing in:', error);
+                    }
+                });
+            }
+        
+            $('#signUpButton').click(function() {
+                signUp();
+            });
+    
+            $('#signInButton').click(function() {
+                signIn();
+            });
+        </script>
+        
+
+    </body>
+    <footer>
+        <div class="container">
+            &copy;SkyAirlines.
+            All rights reserved.
+        </div>
+    </footer>
+</html>

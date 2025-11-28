@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+        <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/style.css">
+        
+        <script src="../bootstrap/bootstrap.bundle.min.js"></script>
+        <script src="../js/script.js"></script> 
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+        <title>Sky Airlines</title>
+    </head>
+    
+    <body>
+        <!-- Container for the logo -->
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <img src="../images/logoImages/skyAirlinesLogo.png" alt="Sky Airlines Logo" class="logo" id="logoImage">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Container for the navigation bar -->
+        <div class="container">
+            <div class="topnav">
+                <a class="active" href="admin_homepage.html">Home</a>
+                <a href="admin_flights.html">Flight Administration</a>
+                <a href="admin_users.html">User Administration</a>
+                <a href="#" onclick="signOut()">Sign-Out</a>
+                <div id="app">
+                    <button class="btn btn-dark col-md-2" style="float: right; margin-right: 20px;" id="darkModeButton" @click="toggleDarkMode">Dark Mode</button>
+                </div>
+            </div>
+        </div>
+        <!-- Container for the welcome message -->
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div>
+                        <div id="greetingMessage"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            //Retrieve 'current_user' value from session storage
+            const currentUser = sessionStorage.getItem('current_user');
+          
+            //if 'current_user' value exists
+            if (currentUser) {
+              //greeting message
+              const greetingMessage = document.getElementById('greetingMessage');
+              greetingMessage.innerHTML = `<h3>Welcome ${currentUser}!</h3>`;
+            }
+           
+        
+            document.addEventListener("DOMContentLoaded", function() {
+                new Vue({
+                    el: '#app',
+                    data: {
+                        isDarkMode: false
+                    },
+                    methods: {
+                        toggleDarkMode() {
+                            this.isDarkMode = !this.isDarkMode;
+                            document.body.classList.toggle('dark-mode', this.isDarkMode);
+                            localStorage.setItem('darkMode', this.isDarkMode);
+
+                            // Change logo based on dark mode state
+                            const logoImage = document.querySelector('.logo');
+                            logoImage.src = this.isDarkMode ? '../images/logoImages/skyAirlinesLogoDark.png' : '../images/logoImages/skyAirlinesLogo.png';
+                        }
+                    },
+                    mounted() {
+                        // Check if user has selected dark mode
+                        const storedDarkMode = localStorage.getItem('darkMode');
+                        if (storedDarkMode !== null) {
+                            this.isDarkMode = storedDarkMode === 'true';
+                            document.body.classList.toggle('dark-mode', this.isDarkMode);
+
+                            // Update logo based on stored dark mode state
+                            const logoImage = document.querySelector('.logo');
+                            logoImage.src = this.isDarkMode ? '../images/logoImages/skyAirlinesLogoDark.png' : '../images/logoImages/skyAirlinesLogo.png';
+                        }
+                    }
+                });
+            });
+        </script>
+    </body>
+
+    <footer>
+        <div class="container">
+            &copy;SkyAirlines.
+            All rights reserved.
+        </div>
+    </footer>
+</html>

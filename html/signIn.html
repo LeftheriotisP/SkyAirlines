@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+        <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/style.css">
+        
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+        <script src="../bootstrap/bootstrap.bundle.min.js"></script>
+        <title>Sky Airlines</title>
+    </head>
+    
+    <body>
+        <!-- Container for the logo -->
+        <div class="container">
+            <div class="row">
+                <div class="col" id="darkModeApp">
+                    <img src="../images/logoImages/skyAirlinesLogo.png" alt="Sky Airlines Logo" class="logo" id="logoImage">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Container for the navigation bar -->
+        <div class="container">
+          <div class="topnav">
+              <a href="homepage.html">Home</a>
+              <a href="flights.html">Flights</a>
+              <a href="signUp.html">Sign-up</a>
+              <a class="active" href="signIn.html">Sign-in</a>
+              <div id="app" style="display: none;"></div>
+          </div>
+        </div>
+
+        <!-- Container for the sign in form -->
+        <div class="container">
+            <h1 style="border-bottom: 1px solid #ccc; padding-bottom: 10px;">Sign In</h1>
+            <form>
+                <div class="col-md-6">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required><br>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required><br>
+                </div>
+        
+                <button class="btn-green-rounded col-md-2" type="button" id="signInButton">Sign In</button>
+            </form>
+            <div id="error-message" style="color: red; margin-top: 10px;"></div>
+        </div>
+        <script>
+            $(document).ready(function() {
+                
+                function signIn(){
+                    console.log('Submitting sign in request...');
+        
+                    const username = $('#username').val();
+                    const password = $('#password').val();
+        
+                    const userData = {
+                        username: username,
+                        password: password  
+                    };
+        
+                    $.ajax({
+                        url: 'http://localhost:3000/users/signin',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(userData),
+                        success: function(data) {
+                            sessionStorage.setItem('current_user', username);
+        
+                            sessionStorage.setItem('userId', data.userId);
+                            $.getJSON(`http://localhost:3000/users/trait/${username}`, function(traitData) {
+                                const trait = traitData.trait;
+                                sessionStorage.setItem('current_trait', trait);
+                                console.log('Current Trait:', trait);
+        
+                                console.log('Current User:', sessionStorage.getItem('current_user'));
+                                console.log('Current Trait:', sessionStorage.getItem('current_trait'));
+        
+                                // Redirect to new page depending on user trait
+                                window.location.href = data.redirect;
+                            });
+                        },
+                        error: function() {
+                            console.error('Error signing in');
+                            const errorMessage = $('#error-message');
+                            errorMessage.text('Invalid username or password');
+                        }
+                    });
+                }
+        
+                $('#signInButton').click(function() {
+                    signIn();
+                });
+            });
+            //darkmode
+            new Vue({
+                el: '#darkModeApp',
+                data: {
+                    isDarkMode: false
+                },
+                methods: {
+                    toggleDarkMode() {
+                        this.isDarkMode = !this.isDarkMode;                            
+                        document.body.classList.toggle('dark-mode', this.isDarkMode);
+                        this.changeLogoImage();
+                        localStorage.setItem('darkMode', this.isDarkMode);
+                    },
+                    changeLogoImage() {
+                        const logoImage = document.getElementById('logoImage');
+                        if (this.isDarkMode) {
+                            logoImage.src = '../images/logoImages/skyAirlinesLogoDark.png';
+                        } else {
+                            logoImage.src = '../images/logoImages/skyAirlinesLogo.png';
+                        }
+                    },
+                },
+                mounted() {
+                    // Check if user has selected darkmode
+                    const storedDarkMode = localStorage.getItem('darkMode');
+                    if (storedDarkMode !== null) {
+                        this.isDarkMode = storedDarkMode === 'true';
+                        document.body.classList.toggle('dark-mode', this.isDarkMode);
+                        this.changeLogoImage();
+                    }
+                }
+            });
+        </script> 
+    </body>
+
+    <footer>
+        <div class="container">
+            &copy;SkyAirlines.
+            All rights reserved.
+        </div>
+    </footer>
+</html>

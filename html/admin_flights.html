@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+        <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/style.css">
+        
+        <script src="../bootstrap/bootstrap.bundle.min.js"></script>
+        <script src="../js/script.js"></script> 
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+        <title>Sky Airlines</title>
+    </head>
+    
+    <body>
+        <!-- Container for the logo -->
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <img src="../images/logoImages/skyAirlinesLogo.png" alt="Sky Airlines Logo" class="logo" id="logoImage">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Container for the navigation bar -->
+        <div class="container">
+          <div class="topnav">
+              <a href="admin_homepage.html">Home</a>
+              <a class="active" href="admin_flights.html">Flight Administration</a>
+              <a href="admin_users.html">User Administration</a>
+              <a href="#" onclick="signOut()">Sign-Out</a>
+              <div id="app" style="display: none;"></div>
+          </div>
+        </div>
+        <!-- create new flight -->
+        <div class="container">
+            <h2>Create New Flight</h2>
+            <form id="createFlight">
+                <div class="col-md-6">
+                    <label for="departureAirport">Departure Airport:</label>
+                    <input type="text" id="departureAirport" name="departureAirport" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="arrivalAirport">Arrival Airport:</label>
+                    <input type="text" id="arrivalAirport" name="arrivalAirport" required><br>
+                </div>
+                <div class="row row-spacing">
+                    <div class="col-md-6">
+                        <label for="departureCountry"><h5>Select Departure Country:</h5></label>
+                        <select id="departureCountry" class="form-control">
+                            <option value="" disabled selected>Select Country</option>
+                            <option value="Greece">Greece</option>
+                            <option value="Germany">Germany</option>
+                            <option value="Italy">Italy</option>
+                            <option value="Spain">Spain</option>
+                            <option value="France">France</option>
+                            <option value="Belgium">Belgium</option>
+                        </select>
+                    </div>
+                </div> 
+                <div class="row row-spacing">
+                    <div class="col-md-6">
+                        <label for="destinationCountry"><h5>Select Destination Country:</h5></label>
+                        <select id="destinationCountry" class="form-control">
+                            <option value="" disabled selected>Select Country</option>
+                            <option value="Greece">Greece</option>
+                            <option value="Germany">Germany</option>
+                            <option value="Italy">Italy</option>
+                            <option value="Spain">Spain</option>
+                            <option value="France">France</option>
+                            <option value="Belgium">Belgium</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="departureDate">Departure Date:</label>
+                    <input class="admin_date"  type="datetime-local" id="departureDate" name="departureDate" min="2023-01-01T00:00" max="2023-12-31T23:59" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="totalSeats">Total Seats:</label>
+                    <input type="text" id="totalSeats" name="totalSeats" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="businessticketPrice">Business Ticket Price:</label>
+                    <input type="text" id="businessticketPrice" name="businessticketPrice" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="economyticketPrice">Economy Ticket Price:</label>
+                    <input type="text" id="economyticketPrice" name="economyticketPrice" required><br>
+                </div>
+                <button class="btn btn-green-rounded col-md-2" type="button" onclick="createFlight()">Create flight</button>
+            </form>
+        </div>
+        <!-- search flights -->
+        <div class="container">
+            <h2>Search Flights:</h2>
+            <form id="searchForm">
+                <div class="col-md-6">
+                    <label for="searchDepartureCountry"><h5>Search by Departure Country:</h5></label>
+                    <div class="col-md-6">
+                        <select id="searchDepartureCountry" class="form-control">
+                            <option value="" disabled selected>Select Country</option>
+                            <option value="Greece">Greece</option>
+                            <option value="Germany">Germany</option>
+                            <option value="Italy">Italy</option>
+                            <option value="Spain">Spain</option>
+                            <option value="France">France</option>
+                            <option value="Belgium">Belgium</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <br>
+                </div>
+                <div class="col-md-6">
+                    <label for="searchDepartureDate">Departure Date:</label>
+                    <input class="admin_date" type="date" id="searchDepartureDate" name="searchDepartureDate" min="2023-01-01T00:00" max="2023-12-31T23:59" required>
+                </div>
+                <button type="button" class="btn btn-primary col-md-2" onclick="searchFlights()">Search</button>
+            </form>
+            <div id="results"></div>
+        </div>  
+        <!-- update flight -->
+        <div class="container">
+            <h2>Update Existing Flight</h2>
+            <form id="updateFlight">
+                <div class="col-md-6">
+                    <label for="updateFlightId">Flight ID:</label>
+                    <input type="text" id="updateFlightId" name="updateFlightId" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="updateDepartureAirport">Departure Airport:</label>
+                    <input type="text" id="updateDepartureAirport" name="updateDepartureAirport" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="updateArrivalAirport">Arrival Airport:</label>
+                    <input type="text" id="updateArrivalAirport" name="updateArrivalAirport" required><br>
+                </div>
+                <div class="row row-spacing">
+                    <div class="col-md-6">
+                        <label for="updateDepartureCountry"><h5>Select Departure Country:</h5></label>
+                        <select id="updateDepartureCountry" class="form-control">
+                            <option value="" disabled selected>Select Country</option>
+                            <option value="Greece">Greece</option>
+                            <option value="Germany">Germany</option>
+                            <option value="Italy">Italy</option>
+                            <option value="Spain">Spain</option>
+                            <option value="France">France</option>
+                            <option value="Belgium">Belgium</option>
+                        </select>
+                    </div>
+                </div> 
+                <div class="row row-spacing">
+                    <div class="col-md-6">
+                        <label for="updateDestinationCountry"><h5>Select Destination Country:</h5></label>
+                        <select id="updateDestinationCountry" class="form-control">
+                            <option value="" disabled selected>Select Country</option>
+                            <option value="Greece">Greece</option>
+                            <option value="Germany">Germany</option>
+                            <option value="Italy">Italy</option>
+                            <option value="Spain">Spain</option>
+                            <option value="France">France</option>
+                            <option value="Belgium">Belgium</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="updateDepartureDate">Departure Date:</label>
+                    <input class="admin_date" type="datetime-local" id="updateDepartureDate" name="updateDepartureDate" min="2023-01-01T00:00" max="2023-12-31T23:59" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="updateTotalSeats">Total Seats:</label>
+                    <input type="text" id="updateTotalSeats" name="updateTotalSeats" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="updateBusinessticketPrice">Business Ticket Price:</label>
+                    <input type="text" id="updateBusinessticketPrice" name="updateBusinessticketPrice" required><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="updateEconomyticketPrice">Economy Ticket Price:</label>
+                    <input type="text" id="updateEconomyticketPrice" name="updateEconomyticketPrice" required><br>
+                </div>
+                <button class="btn btn-primary col-md-2" type="button" onclick="updateFlight()">Update Flight</button>
+            </form>
+        </div>
+
+        <!-- delete flight -->
+        <div class="container">
+            <h2>Delete Flight</h2>
+            <form id="deleteForm">
+                <div class="col-md-6">
+                    <label for="delete">Fill with flight's ID:</label>
+                    <input type="text" id="delete" name="delete" required>
+                </div>
+                <button type="button" class="btn btn-danger col-md-2" onclick="deleteFlight()">Delete Flight</button>
+            </form>
+        </div>
+        <script>
+            // Darkmode
+            document.addEventListener("DOMContentLoaded", function() {
+                new Vue({
+                    el: '#app',
+                    data: {
+                        isDarkMode: false
+                    },
+                    methods: {
+                        toggleDarkMode() {
+                            this.isDarkMode = !this.isDarkMode;
+                            document.body.classList.toggle('dark-mode', this.isDarkMode);
+                            localStorage.setItem('darkMode', this.isDarkMode);
+
+                            // Change logo based on dark mode state
+                            const logoImage = document.querySelector('.logo');
+                            logoImage.src = this.isDarkMode ? '../images/logoImages/skyAirlinesLogoDark.png' : '../images/logoImages/skyAirlinesLogo.png';
+                        }
+                    },
+                    mounted() {
+                        // Check if user has selected dark mode
+                        const storedDarkMode = localStorage.getItem('darkMode');
+                        if (storedDarkMode !== null) {
+                            this.isDarkMode = storedDarkMode === 'true';
+                            document.body.classList.toggle('dark-mode', this.isDarkMode);
+
+                            // Update logo based on stored dark mode state
+                            const logoImage = document.querySelector('.logo');
+                            logoImage.src = this.isDarkMode ? '../images/logoImages/skyAirlinesLogoDark.png' : '../images/logoImages/skyAirlinesLogo.png';
+                        }
+                    }
+                });
+            });
+            // create flight 
+            function createFlight() {
+                console.log('Submitting create flight request...');
+
+                const departureAirport = document.getElementById('departureAirport').value;
+                const arrivalAirport = document.getElementById('arrivalAirport').value;
+                const departureCountry = document.getElementById('departureCountry').value;
+                const destinationCountry = document.getElementById('destinationCountry').value;
+                const departureDate = document.getElementById('departureDate').value;
+                const totalSeats = document.getElementById('totalSeats').value;
+                const businessticketPrice = document.getElementById('businessticketPrice').value;
+                const economyticketPrice = document.getElementById('economyticketPrice').value;
+
+                const flightData = {
+                    departureAirport: departureAirport,
+                    arrivalAirport: arrivalAirport,
+                    departureCountry: departureCountry,
+                    destinationCountry: destinationCountry,
+                    departureDate: departureDate,
+                    totalSeats: totalSeats,
+                    businessticketPrice: businessticketPrice,
+                    economyticketPrice: economyticketPrice
+                };
+                
+                fetch('http://localhost:3000/flights', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(flightData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Flight created:', data);
+                    window.location.href = 'admin_homepage.html';
+                })
+                .catch(error => {
+                    console.error('Error creating flight:', error);
+                    alert('An error occurred while creating the flight.');
+                });
+            }
+            // search Flights
+            function searchFlights() {
+                const departureCountry = document.getElementById('searchDepartureCountry').value;
+                const departureDate = document.getElementById('searchDepartureDate').value;
+
+                fetch(`http://localhost:3000/flights/${departureCountry}/${departureDate}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const resultsDiv = document.getElementById('results');
+                        resultsDiv.innerHTML = '';
+
+                        if (data.length > 0) {
+                            const table = document.createElement('table');
+                            table.className = 'table';
+
+                            const thead = document.createElement('thead');
+                            const theadRow = document.createElement('tr');
+                            ['Flight ID', 'Departure Date', 'Departure Country', 'Destination Country', 'Departure Airport', 'Arrival Airport', 'Total Seats', 'Business Ticket Price', 'Economy Ticket Price', 'Reserved Tickets'].forEach(headerText => {
+                                const th = document.createElement('th');
+                                th.scope = 'col';
+                                th.textContent = headerText;
+                                theadRow.appendChild(th);
+                            });
+                            thead.appendChild(theadRow);
+                            table.appendChild(thead);
+
+                            const tbody = document.createElement('tbody');
+                            data.forEach(flight => {
+                                const row = document.createElement('tr');
+                                const reservedTickets = flight.seats.filter(seat => seat.isReserved).length;//count reserved seats
+                                const rowData = [
+                                    flight._id,
+                                    flight.departureDate, 
+                                    flight.departureCountry,
+                                    flight.destinationCountry,
+                                    flight.departureAirport,
+                                    flight.arrivalAirport,
+                                    flight.totalSeats,
+                                    flight.businessticketPrice,
+                                    flight.economyticketPrice,
+                                    reservedTickets
+                                ];
+                                rowData.forEach(cellData => {
+                                    const cell = document.createElement('td');
+                                    cell.textContent = cellData;
+                                    row.appendChild(cell);
+                                });
+                                tbody.appendChild(row);
+                            });
+                            table.appendChild(tbody);
+
+                            resultsDiv.appendChild(table);
+                        } else {
+                            resultsDiv.textContent = 'No flights found.';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error searching flights:', error);
+                    });
+            }
+            // update flight
+            function updateFlight() {
+                const flightId = document.getElementById('updateFlightId').value;
+
+                // Get values from input fields
+                const departureAirport = document.getElementById('updateDepartureAirport').value;
+                const arrivalAirport = document.getElementById('updateArrivalAirport').value;
+                const departureCountry = document.getElementById('updateDepartureCountry').value;
+                const destinationCountry = document.getElementById('updateDestinationCountry').value;
+                const departureDate = document.getElementById('updateDepartureDate').value;
+                const totalSeats = document.getElementById('updateTotalSeats').value;
+                const businessticketPrice = document.getElementById('updateBusinessticketPrice').value;
+                const economyticketPrice = document.getElementById('updateEconomyticketPrice').value;
+
+                // Create an object to hold updated data
+                const updatedFlightData = {};
+
+                // Add properties to the object only if fields are not empty
+                if (departureAirport) {
+                    updatedFlightData.departureAirport = departureAirport;
+                }
+                if (arrivalAirport) {
+                    updatedFlightData.arrivalAirport = arrivalAirport;
+                }
+                if (departureCountry) {
+                    updatedFlightData.departureCountry = departureCountry;
+                }
+                if (destinationCountry) {
+                    updatedFlightData.destinationCountry = destinationCountry;
+                }
+                if (departureDate) {
+                    updatedFlightData.departureDate = departureDate;
+                }
+                if (totalSeats) {
+                    updatedFlightData.totalSeats = totalSeats;
+                }
+                if (businessticketPrice) {
+                    updatedFlightData.businessticketPrice = businessticketPrice;
+                }
+                if (economyticketPrice) {
+                    updatedFlightData.economyticketPrice = economyticketPrice;
+                }
+
+                fetch(`http://localhost:3000/flights/${flightId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedFlightData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Flight updated:', data);
+                })
+                .catch(error => {
+                    console.error('Error updating user:', error);
+                });
+            }
+            // delete flight
+            function deleteFlight() {
+                const flightId = document.getElementById('delete').value;
+
+                // Show a confirmation prompt
+                const confirmed = window.confirm("Are you sure you want to delete this user?");
+                
+                if (confirmed) {
+                    fetch(`http://localhost:3000/flights/deleteFlight/${flightId}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        
+                        console.log('Flight deleted:', data);
+                    })
+                    .catch(error => {
+                        
+                        console.error('Error deleting flight:', error);
+                    });
+                }
+            }
+
+
+
+        </script>
+    </body>
+
+    <footer>
+        <div class="container">
+            &copy;SkyAirlines.
+            All rights reserved.
+        </div>
+    </footer>
+</html>

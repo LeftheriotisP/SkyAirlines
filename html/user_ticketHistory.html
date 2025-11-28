@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/style.css">
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+        <script src="../bootstrap/bootstrap.bundle.min.js"></script>
+        <script src="../js/script.js"></script>
+        <title>Sky Airlines</title>
+    </head>
+
+    <body>
+        <!-- Container for the logo -->
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <img src="../images/logoImages/skyAirlinesLogo.png" alt="Sky Airlines Logo" class="logo" id="logoImage">
+                </div>
+            </div>
+        </div>
+
+        <!-- Container for the navigation bar -->
+        <div class="container">
+            <div class="topnav">
+                <a href="user_homepage.html">Home</a>
+                <a href="user_transaction.html">Tickets</a>
+                <a class="active" href="user_ticketHistory.html">Ticket History</a>
+                <a href="wordGame.html">Word Game</a>
+                <a href="#" onclick="signOut()">Sign-Out</a>
+            </div>
+        </div>
+        <!-- container for transactions table -->
+        <div id="app" class="container">
+            <div class="row">
+                <h2>Ticket History:</h2>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Ticket Info</th>
+                        <th>Total Cost</th>
+                        <th>Discount</th>
+                        <th>Email</th>
+                        <th>Card Type</th>
+                        <th>Card Number</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <tr v-for="transaction in transactions" :key="transaction._id">
+                        <td>{{ transaction._id }}</td>
+                        <td>
+                            <template v-for="(ticket, ticketIndex) in transaction.ticketsIds">
+                                <div>
+                                    <span class="ticket-number">Ticket {{ ticketIndex + 1 }}:</span><br>
+                                    Firstname: {{ ticket.firstname }}<br>
+                                    Lastname: {{ ticket.lastname }}<br>
+                                    Birth Date: {{ new Date(ticket.birthDate).toLocaleDateString() }}<br>
+                                    ID Number: {{ ticket.idNumber }}<br>
+                                    Seat Number: {{ ticket.seatNumber }}<br>
+                                    Seat Class: {{ ticket.seatClass }}<br>
+                                    Ticket Cost: €{{ ticket.ticketCost }}<br>
+                                    Flight ID: {{ ticket.flightId }}<br>
+                                    Departure Date: {{ ticket.departureDate }}<br>
+                                    Departure Airport: {{ ticket.departureAirport }}<br>
+                                    Arrival Airport: {{ ticket.arrivalAirport }}<br>
+                                    Departure Country: {{ ticket.departureCountry }}<br>
+                                    Destination Country: {{ ticket.destinationCountry }}<br><br>
+                                </div>
+                            </template>
+                        </td>
+                        <td>{{ transaction.totalCost + '€' }}</td>
+                        <td>{{ transaction.discountCode || '' }}</td>
+                        <td>{{ transaction.email }}</td>
+                        <td>{{ transaction.cardType }}</td>
+                        <td>{{ transaction.cardNumber }}</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+   
+        <script>
+            new Vue({
+                el: '#app',
+                data: {
+                    transactions: [],
+                    isDarkMode: false
+                },
+                methods: {
+                    async getFlightDetails(flightId) {
+                        try {
+                            const response = await fetch(`http://localhost:3000/flights/getFlightById/${flightId}`);
+                            const data = await response.json();
+                            return {
+                                departureDate: data.departureDate,
+                                departureAirport: data.departureAirport,
+                                arrivalAirport: data.arrivalAirport,
+                                departureCountry: data.departureCountry,
+                                destinationCountry: data.destinationCountry,
+                            };
+                        } catch (err) {
+                            console.error('Error:', err);
+                            return {
+                                departureDate: 'N/A',
+                                departureAirport: 'N/A',
+                                arrivalAirport: 'N/A',
+                                departureCountry: 'N/A',
+                                destinationCountry: 'N/A',
+                            };
+                        }
+                    },
+
+                    async fetchTransactions() {
+                        const userId = sessionStorage.getItem('userId');
+                        const response = await fetch(`http://localhost:3000/transactions/${userId}`);
+                        const transactions = await response.json();
+
+                        for (const transaction of transactions) {
+                            for (const ticket of transaction.ticketsIds) {
+                                const flightDetails = await this.getFlightDetails(ticket.flightId);
+                                ticket.destinationCountry = flightDetails.destinationCountry;
+                                ticket.departureDate = flightDetails.departureDate;
+                                ticket.departureAirport = flightDetails.departureAirport;
+                                ticket.arrivalAirport = flightDetails.arrivalAirport;
+                                ticket.departureCountry = flightDetails.departureCountry;
+                            }
+                        }
+                        this.transactions = transactions;
+                    },
+                    toggleDarkMode() {
+                        this.isDarkMode = !this.isDarkMode;
+                        document.body.classList.toggle('dark-mode', this.isDarkMode);
+                        localStorage.setItem('darkMode', this.isDarkMode);
+
+                        // Change logo if dark mode
+                        const logoImage = document.querySelector('#logoImage');
+                        logoImage.src = this.isDarkMode ? '../images/logoImages/skyAirlinesLogoDark.png' : '../images/logoImages/skyAirlinesLogo.png';
+                    }
+                },
+                async mounted() {
+                    
+                    const storedDarkMode = localStorage.getItem('darkMode');
+                    if (storedDarkMode !== null) {
+                        this.isDarkMode = storedDarkMode === 'true';
+                        document.body.classList.toggle('dark-mode', this.isDarkMode);
+
+                        // Update logo if dark mode 
+                        const logoImage = document.querySelector('#logoImage');
+                        logoImage.src = this.isDarkMode ? '../images/logoImages/skyAirlinesLogoDark.png' : '../images/logoImages/skyAirlinesLogo.png';
+                    }
+                    this.fetchTransactions();
+                }
+            });
+        </script>
+    
+    </body>
+    <footer>
+        <div class="container">
+            &copy;SkyAirlines.
+            All rights reserved.
+        </div>
+    </footer>
+</html>
