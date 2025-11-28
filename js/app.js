@@ -25,8 +25,8 @@ const MURL ='mongodb+srv://student:1234@cluster0.vnybknh.mongodb.net/myFirstDB?r
 const transporter = nodemailer.createTransport({
   service: 'Outlook', 
   auth: {
-    user: 'skyAirlines1234@outlook.com',
-    pass: 'sky123air',
+    user: 'testuser',
+    pass: 'testpass',
   },
 });
 app.use(express.json());
@@ -69,4 +69,5 @@ async function connectToMongoDB() {
       console.log('Your server is up and running...');
     });
   });
+
 
