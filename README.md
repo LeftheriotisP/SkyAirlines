@@ -1,4 +1,9 @@
 ✈️ Airport Ticket Reservation System (MEVN Stack)
+
+👤 Author
+
+Panagiotis Leftheriotis
+
 📌 Overview
 
 This project is a full-stack MEVN (MongoDB, Express, Vue.js, Node.js) application for managing airport ticket reservations.
@@ -124,6 +129,4 @@ Example:
 
 /assets/screenshots/home.png
 
-👤 Author
 
-Panagiotis Leftheriotis
