@@ -1,132 +1,199 @@
-✈️ Airport Ticket Reservation System (MEVN Stack)
+SkyAirlines – Airport Ticket Reservation System (MEVN)
+Δημιουργός
 
-👤 Author
+Παναγιώτης Λευθεριώτης
 
-Panagiotis Leftheriotis
+Επικοινωνία
 
-📌 Overview
+p.leftheriotis@gmail.com
 
-This project is a full-stack MEVN (MongoDB, Express, Vue.js, Node.js) application for managing airport ticket reservations.
-The system allows users to search for flights, book seats, manage their reservations, and interact with a user-friendly interface built using Vue.js.
+Περιεχόμενα
 
-The backend provides a RESTful API developed with Node.js and Express, while MongoDB is used to store all flight, user and reservation data.
+Επιπλέον Παραδοχές
 
-🚀 Features
-User Features
+Τεχνολογίες που χρησιμοποιήθηκαν
 
-Search for available flights
+Περιγραφή των αρχείων
 
-View flight details (airline, date, time, price, destination)
+Τρόπος Εκτέλεσης
 
-Ticket booking and seat reservation
+Τρόπος Χρήσης
 
-Cancel or update reservations
+Ως Χρήστης
 
-User login & registration
+Ως Διαχειριστής
 
-Admin Features
+Αναφορές
 
-Add, edit, or delete flights
+Επιπλέον Παραδοχές
 
-View all reservations
+Όλες οι φόρμες χρήσης (κρατήσεις, αναζήτηση πτήσεων, είσοδος, εγγραφή) έχουν ελέγχους εγκυρότητας.
 
-Manage users
+Τα δεδομένα των πτήσεων θεωρούνται έγκυρα και ενημερώνονται μόνο από τον διαχειριστή.
 
-Ensure data integrity
+Τα usernames είναι μοναδικά.
 
-🛠️ Technologies Used
-Frontend
+Η τιμή των εισιτηρίων και η διαθεσιμότητα ενημερώνονται σε πραγματικό χρόνο κατά τη διάρκεια της κράτησης.
 
-Vue.js
-
-HTML5 / CSS3 / Bootstrap
-
-Axios for API requests
-
+Τεχνολογίες που χρησιμοποιήθηκαν
 Backend
 
-Node.js
+Node.js – Εκτέλεση του server
 
-Express.js
+Express.js – REST API routes & επιχειρησιακή λογική
 
-MongoDB & Mongoose
+MongoDB – Αποθήκευση χρηστών, πτήσεων και κρατήσεων
+
+Mongoose – Μοντελοποίηση δεδομένων και schema validation
+
+Frontend
+
+Vue.js – Διεπαφή χρήστη
+
+HTML5 / CSS3
+
+Bootstrap – Σχεδιασμός & responsive στοιχεία
+
+Axios – Επικοινωνία με το REST API
 
 Other
 
-RESTful API architecture
+RESTful API Architecture
 
 JSON-based communication
 
-📂 Project Structure
-root/
-│── backend/
-│   ├── app.js
-│   ├── models/
-│   ├── routes/
-│   ├── package.json
-│
-│── frontend/
-│   ├── src/
-│   ├── public/
-│   ├── package.json
-│
-│── docs/
-│   └── report.pdf   (optional – full documentation)
-│
-└── README.md
+npm για διαχείριση πακέτων
 
-🔧 Installation & Setup
-1️⃣ Clone the repository
+Περιγραφή των αρχείων
+
+backend/app.js
+Ο πυρήνας της εφαρμογής. Περιέχει τον Express server, σύνδεση με MongoDB και τα API routes.
+
+backend/models/
+Τα Mongoose models για:
+
+Χρήστες
+
+Πτήσεις
+
+Κρατήσεις
+
+backend/routes/
+Περιέχει όλα τα REST API endpoints για:
+
+Authentication
+
+Flights
+
+Bookings
+
+backend/package.json
+Βιβλιοθήκες & scripts του backend.
+
+frontend/src/
+Κύριος κώδικας Vue.js (σελίδες, components, views).
+
+frontend/public/
+Static αρχεία του front-end.
+
+frontend/package.json
+Βιβλιοθήκες & scripts του frontend.
+
+docs/report.pdf
+Προαιρετικό – αναλυτική τεκμηρίωση της εφαρμογής.
+
+README.md
+Το παρόν αρχείο που περιγράφει το σύστημα SkyAirlines.
+
+Τρόπος Εκτέλεσης
+1) Κατέβασμα του Project
+
+Κατεβάζουμε ή κάνουμε clone το repository:
+
 git clone https://github.com/your-username/your-repo.git
 cd your-repo
 
-2️⃣ Backend Setup
+2) Εκτέλεση Backend
 cd backend
 npm install
 npm start
 
 
-Server starts at:
-
+Ο server εκτελείται στο:
 http://localhost:3000
 
-3️⃣ Frontend Setup
+3) Εκτέλεση Frontend
 cd frontend
 npm install
 npm run serve
 
 
-App runs at:
-
+Το web interface εκτελείται στο:
 http://localhost:8080
 
-📡 API Endpoints (Examples)
-Flights
-Method	Endpoint	Description
-GET	/flights	Get all flights
-POST	/flights	Add new flight
-GET	/flights/:id	Get specific flight
-PUT	/flights/:id	Update flight
-DELETE	/flights/:id	Delete flight
-Reservations
-Method	Endpoint	Description
-POST	/reservations	Create reservation
-GET	/reservations/user/:id	Get reservations by user
-DELETE	/reservations/:id	Cancel reservation
-🖼️ Screenshots (optional)
+Τρόπος Χρήσης
+Ως Χρήστης
 
-Add images such as:
+Εγγραφή νέου χρήστη
+Ο χρήστης μπορεί να δημιουργήσει λογαριασμό εισάγοντας τα στοιχεία του μέσω της σχετικής φόρμας.
 
-Homepage
+Screenshot Placeholder
 
-Flight list
+Σύνδεση στον λογαριασμό
+Ο χρήστης συνδέεται εισάγοντας το username και τον κωδικό του.
 
-Booking page
+Αναζήτηση πτήσεων
+Ο χρήστης εισάγει:
 
-Admin panel
+Ημερομηνία
 
-Example:
+Προορισμό
 
-/assets/screenshots/home.png
+Αεροπορική εταιρεία (προαιρετικά)
 
+και εμφανίζονται οι διαθέσιμες πτήσεις.
 
+Screenshot Placeholder
+
+Κράτηση εισιτηρίου
+Στην οθόνη μίας πτήσης μπορεί να γίνει κράτηση θέσης και επιβεβαίωση εισιτηρίου.
+
+Screenshot Placeholder
+
+Προβολή κρατήσεων
+Ο χρήστης βλέπει όλες τις μελλοντικές κρατήσεις του και μπορεί να δει λεπτομέρειες.
+
+Ακύρωση κράτησης
+Ο χρήστης μπορεί να ακυρώσει μία κράτηση, με άμεση ενημέρωση των διαθεσίμων θέσεων.
+
+Αποσύνδεση
+Από το μενού μπορεί να γίνει logout.
+
+Ως Διαχειριστής
+
+Ο λογαριασμός του διαχειριστή καθορίζεται μέσα στη βάση ή στο αρχείο αρχικοποίησης.
+
+Σύνδεση admin
+Ο διαχειριστής συνδέεται με τα δικά του credentials.
+
+Διαχείριση πτήσεων
+
+Προσθήκη νέας πτήσης
+
+Επεξεργασία υπαρχουσών
+
+Διαγραφή πτήσεων
+
+Screenshot Placeholder
+
+Διαχείριση χρηστών
+Ο admin μπορεί να δει χρήστες και κρατήσεις.
+
+Προβολή όλων των κρατήσεων
+Πλήρης λίστα όλων των εισιτηρίων που έχουν εκδοθεί.
+
+Αποσύνδεση διαχειριστή
+
+Αναφορές
+
+Κατά την ανάπτυξη χρησιμοποιήθηκαν βασικές τεχνικές MEVN stack, επίσημη τεκμηρίωση των βιβλιοθηκών και παραδείγματα REST API αρχιτεκτονικής.
