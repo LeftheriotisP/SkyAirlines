@@ -198,6 +198,87 @@ If the connection was successful, we will be transferred to the registered user'
 3) “Dark Mode” function if selected from the Home page
 
 ### Registered User Pages
+In order for an application user to gain access to the registered user pages, they must register via the “Sign-up” page or log in to an account via the “Sign-in” page as previously mentioned.
+#### Home
+The registered user's Home page corresponds to the file “user_homepage.html” and is the registered user's home page which contains the following functions:
+1) Navigation of the registered user to the Tickets, Ticket History and Word Game pages corresponding to the files “user_transaction.html”, “user_ticketHistory.html” and “wordGame.html” via the navigation bar at the top of the page.
+2) Switch the application colors to darker tones using the “Dark Mode” button on the right side of the navigation bar. The result of this option is shown in the image below. This option remains on the remaining pages.
+3) Welcome Message for Each User. Below the navigation bar, a message appears that says “Welcome aboard,” and the username of the registered user who is logged in.
+4) Interactive map of Europe where the user can hover over the countries and some information about that country and an image of a famous landmark of its capital will appear. In addition, when the user hovers over a country, it changes color from dark blue to yellow as shown below.
+5) Select a country from the map to purchase tickets. To start the ticket purchase process, the user must select their destination from the available countries on the map and click on it to be redirected to the Tickets page where the ticket purchase function is located.
+6) Log out of the application via the Sign-Out button located in the navigation bar. If the registered user wants to log out of their account, they must click the Sign Out button and then a confirmation message will appear.
+   
+![intMap1](https://github.com/user-attachments/assets/35a3fefc-0271-4545-a9d6-734011868180)
+
+#### Tickets
+The Tickets page corresponds to the file “user_transaction.html” and contains the ticket purchase. Specifically, the functions of the page are:
+1) Navigation of the registered user to the Home, Ticket History and Word Game pages corresponding to the files “user_homepage.html”, “user_ticketHistory.html” and “wordGame.html” via the navigation bar at the top of the page.
+2) “Dark Mode” function if it has been selected from the Home page.
+3) Enlarged image of the country selected by the registered user from the map on the Home page. In these images, Spain has been selected as it serves the example. If the user has not selected a country, then such an image does not appear on the page.
+4) Purchase of tickets: The registered user can purchase tickets for the flight he wants. Specifically, the user selects from the Home page the destination country “Destination Country” that interests him. If he wants to change the destination country, he must select a different country from the map on the Home page of the registered user, as indicated in a message below the enlarged image. Then he must select the departure country “Departure Country” from the dropdown list with the available countries and choose from the radio buttons below the image of the country whether he wants a simple “One Way” or a return trip “Round Trip”. If the user chooses “One Way”, only one field is displayed for selecting the departure date of the flight for the transfer, while if they choose the “Round Trip” option, 2 fields are displayed for the selection of the date of the flight for the transfer and the selection of the date of the flight for the return. Then the user must select how many people “passengers” he will book tickets for from the dropdown list that allows him from 1-5 people. In this specific example we selected “Round Trip”
+
+![tickets1](https://github.com/user-attachments/assets/8d9c5074-1134-47ff-990c-8dafcb683f9a)
+
+When the user presses the “Show Available Flights” button, the application will search for available flights that meet the criteria the user previously selected and will display the corresponding outbound and return flights as shown below in our example. Outbound flights are called “Outbound Flights” and return flights are called “Inbound Flights”. The user can view the details of each flight and select the ones that are wishes, one of each type, by pressing the “Book This” button on the flight card. When the user clicks on a flight, all related flights are hidden. To continue, he must press the “Select seats” button. If there are no available flights, then in order to search with different parameters, the user must start the ticket purchase process again. After clicking the “Select seats” button, an image with 60 seats on the plane appears below on the same page so that he knows their numbering and below the image, a dropdown list appears with the available seats on the specific flight and the type of each seat, for each person that the user has chosen from the previous options. Next to each dropdown list there is a message indicating for which person the user is choosing a seat. Below the dropdown lists there is a field for filling in a discount code if the user has one in his possession and a field indicating the total amount of seats based on the choices made by the user. Specifically, it calculates from the charge of the seats selected, whether a return flight has been selected and whether a correct discount code has been entered, and is dynamically updated with each selection made by the user.
+
+![tickets2](https://github.com/user-attachments/assets/270a2a04-8f0c-4da0-9de4-0e1a7243271d)
+
+In our example, 2 economy seats and a return trip were selected, where one costs €120, so 4x120 = €480, and no discount code was used. To continue, the user must click the “Continue with payment” button. By clicking the button, the previous fields will be deactivated and the following fields will appear on the same page, in order: a field for filling in the email address to which he would like the tickets to be sent, radio buttons for selecting the type of credit card, 4 fields for filling in the 16-digit credit card number, where each field accepts only 4 digits, and a field that must be filled in with the random 5-digit number that appears next to the field. If the user has not filled in any field, then he cannot proceed with the purchase of the tickets, as the “Check Out” button for purchasing the tickets will be deactivated.
+
+![tickets3](https://github.com/user-attachments/assets/395ad2b3-b90f-4850-afad-dee1e69f7e53)
+
+If the user has incorrectly filled in the 5-digit security number, a relevant message will appear as shown in the image below and they will not be able to proceed with the purchase of tickets.
+
+![tickets4](https://github.com/user-attachments/assets/1bd11dbf-5d60-4228-98a7-dbb30c21d827)
+
+If he has completed all the fields and the 5-digit security number is correct, he can then press the “Check Out” button to purchase his tickets and have them sent to the email address he entered in the corresponding field. The ticket booking process may take a few seconds. If the tickets are booked successfully, a confirmation message will appear. To continue, he must press the OK button.
+
+The next image shows the tickets as they have been sent to the customer's email.
+
+![tickets5](https://github.com/user-attachments/assets/1bba59a9-e3ce-4217-b9e7-15bbd7c60145)
+
+As can be seen in the email, the details of each ticket are listed, which are numbered, and after the tickets, the details of the first flight, which is the outward flight, and then the details of the second flight, which is the return flight.
+
+After filling in all the fields, the user must press the “Enter passenger info” button. Then, further down on the same page, fields will appear to fill in the details of each person who wants to book a ticket, depending on how many people they selected in the previous dropdown. The details of each person are distinguished by the titles “Passenger 1”, “Passenger 2” etc. so each person has the fields “First Name”, the surname “Last Name”, the date of birth “Date of Birth” and the identification number “Identification Number”. After filling them in, the user must press the “Show Available Flights” button to proceed.
+
+5) Log out of the application via the Sign-Out button located in the navigation bar. If the registered user wants to log out of their account, they must click the Sign Out button and then a confirmation message will appear.
+
+#### Ticket History
+The Ticket History page corresponds to the file “user_ticketHitory.html” and contains the following functions:
+1) Navigation of the registered user to the Home, Tickets and Word Game pages corresponding to the files “user_homepage.html”, “user_transaction.html” and “wordGame.html” via the navigation bar at the top of the page.
+2) “Dark Mode” function if it has been selected from the Home page.
+3) View user transaction history. When the registered user enters the “Ticket History” page, the application searches for all transactions “transactions” that have as “UserId” the unique id of the specific user and displays them in a table format as shown in the example below. Specifically, the table shows the unique transaction ID “Transaction Id”, the details of each ticket “Ticket Info” that the transaction concerns, the total cost “Total Cost” of the transaction’s tickets, the discount code “Discount” if used, the email to which the tickets were sent, the user’s credit card type “Card Type” and the user’s 16-digit card number “Card Number”. As can be seen from the previous images, if the user has made multiple transactions, they are displayed one below the other in the table.
+
+![tickets6](https://github.com/user-attachments/assets/a4661103-b2ca-413a-a7fa-fa33c1e4542c)
+
+4) Log out of the application via the Sign-Out button located in the navigation bar. If the registered user wants to log out of his account, he must click the Sign Out button and then a confirmation message will appear as shown below. Here, the registered user can confirm his logout by clicking the OK button, otherwise he can cancel his logout and remain on the same page by clicking the Cancel button. In case he clicks OK, he will be transferred to the Home page of the unregistered user.
+   
+#### Word Game
+The Word Game page corresponds to the file “wordGame.html” and contains the following functions:
+1) Navigation of the registered user to the Home, Tickets and Ticket History pages corresponding to the files “user_homepage.html”, “user_transaction.html” and “user_ticketHistory.html” via the navigation bar at the top of the page.
+2) “Dark Mode” function if it has been selected from the Home page as shown in the image below
+3) Anagram Game: When the user enters the “Word Game” page, the application randomly selects one of the names of the available countries for which the airline operates flights and displays it to the user having changed the order of its letters as shown below.
+
+![game1](https://github.com/user-attachments/assets/1c3b132c-5c19-4374-aea1-662a543af770)
+
+The user is asked to find the word that has been anagrammed and fill in the fields located directly below the image with the appropriate letters and check his answer by pressing the corresponding button to win a discount code. This button appears once all the fields have been filled in. Each field accepts only one letter and is in uppercase even if the user fills in lowercase letters. The anagrammed word is in English like all the pages of the application. Below is the page after the user has filled in all the fields.
+
+![game2](https://github.com/user-attachments/assets/e9531541-f5ab-4a00-948f-df5a8b8d9dbb)
+
+To check his answer, the user must press the “Check Word” button. If the answer he gave is wrong, a message will appear stating that it's not correct. If the answer he gave is correct, then a message will appear with a field to fill in his email so that the discount code he just won can be sent to him.
+
+![game3](https://github.com/user-attachments/assets/fe7f857b-f4ef-4cdc-8ac1-a6c6872956f8)
+
+If the user presses OK, the discount code will be sent to the email address he filled in the field. This email is shown below. 
+
+![game4](https://github.com/user-attachments/assets/cd8922d5-07a3-406c-bff4-2c8e2b52165f)
+
+This discount code is stored in the discountCode field of the specific user as shown below in the image from the database. 
+
+![game5](https://github.com/user-attachments/assets/d38debce-0a2a-40f8-9f1a-33b900e167ce)
+
+This code can only be used by the specific user when purchasing tickets in the application and only once in order to reduce the cost of each ticket of the transaction by €10. If the user clicks the “Cancel” button, then the email will not be sent to him. If the user does not want to play the game, he can be redirected to one of the pages mentioned from the navigation bar of the “Word Game” page or click the “Return to Homepage” button located at the bottom of the page and it will redirect him to the “Home” page of the registered user.
+6) Log out of the application via the Sign-Out button located in the navigation bar. If the registered user wants to log out of his account, he must click the Sign Out button and then a confirmation message will appear.
 
 ### Administrator Pages
 To access the administrator pages and functions, the user must log in to their account from the Sign In page that corresponds to the “signIn.html” file as previously mentioned in the unregistered user pages. Specifically, there is only one administrator account in the application and there is no function to create such an account through the application. The administrator login details are as follows:
@@ -301,4 +382,5 @@ The User Administration page corresponds to the file “admin_users.html” and 
 The user search displays all their fields except for the password “password” and the unique ID “uuid”.
 5) Edit users. Similar to editing flights, the administrator can edit the details of an existing user. All he has to do is fill in the unique user id “User ID” that he can obtain through the search and then fill in as many fields as he wants to change their value. The administrator cannot, however, edit the user’s login details, namely the login name “username” and the login password “password”.
 6) Delete User: The administrator can delete a user from the application by filling in the unique user ID “UserID” which can be obtained from the search as mentioned previously and pressing the Delete User button.
+7) Log out of the application via the Sign-Out button located in the navigation bar. If the administrator wants to log out of his account, he must click the Sign Out button and then a confirmation message will appear.
 
