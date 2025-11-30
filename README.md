@@ -104,195 +104,184 @@ If you encounter a problem when starting the application, make sure that on line
 
 ![appstart3](https://github.com/user-attachments/assets/7bfb1969-92c2-4e84-b202-68561724c460)
 
-<!---
-your comment goes here
-and here
+If there is a problem connecting, the message “Error connecting to MongoDB:” will appear, followed by the relevant problem. The application “listens” on port 3000 of localhost as shown in line 68 of the following image from the app.js file.
 
-## Application Requirements
-- Promotion of the company and its services: The main objective of the application is to increase the visibility of the company, its services, the countries it connects, the number of flights and the ticket prices it offers to a wider audience
-- Online ticket purchase: Through the electronic application, users will be able to choose their flights and buy their tickets easily with just a few "clicks"
-- Attracting customers due to competitive prices: The application will offer the possibility of a discount through a simple game that customers can easily win
-- Reduction of staff: Online customer service will lead to a reduction in the staff involved in issuing tickets, providing information, etc.
-- Ticket history: Full information to the customer about current and previous transactions
-- Attract partners: Easy access to itineraries will make it easier for partners such as tourist offices and travel agents to choose the specific company
-- Statistics: Storing tickets in the company's database will help in decision-making with the statistical study of customer preferences
-## Modern Web Application Trends
+![appstart4](https://github.com/user-attachments/assets/d1c320b4-2d65-490f-83d3-29257841da4f)
 
-## Application Technologies
+In case of problems with starting the server, it is recommended to change this port to another one, such as 3001, as the previous port may be used by another application on your system. Also, in case of problems with starting the application, it is recommended to use the command “npm install” in the terminal of the application path, which command will search for all packages used by the application and check if they exist or install them if they are missing.
 
-## User Manual
-  
-## Επιπλέον Παραδοχές
-- Όλες οι φόρμες χρήσης (κρατήσεις, αναζήτηση πτήσεων, είσοδος, εγγραφή) έχουν ελέγχους εγκυρότητας.
+### Application termination
+To terminate the application, the command Ctrl+C is given in the terminal where the message “Terminate batch job (Y/N)” will appear and to complete the termination, it is enough to write the letter Y and Enter or the command Ctrl+C again.
 
-Τα δεδομένα των πτήσεων θεωρούνται έγκυρα και ενημερώνονται μόνο από τον διαχειριστή.
+## Application Pages
+### Unregistered User Pages
+We will start by demonstrating the pages that an unregistered user has access to.
+#### Home
+The application home page for a user who has not registered in the application is “Home” which corresponds to the file “homepage.html” shown in the image below.
 
-Τα usernames είναι μοναδικά.
+![home1](https://github.com/user-attachments/assets/a9a4b81b-635d-4c18-9810-75bc20bc5547)
 
-Η τιμή των εισιτηρίων και η διαθεσιμότητα ενημερώνονται σε πραγματικό χρόνο κατά τη διάρκεια της κράτησης.
+On this page the supported functions are:
+1) User navigation to the Flights, Sign-up and Sign-in pages corresponding to the files “flights.html”, “signUp.html” and “signIn.html” via the navigation bar at the top of the page.
+2) Switch the application colors to darker tones using the “Dark Mode” button on the right side of the navigation bar. The result of this option is shown in the image below. This option remains on the remaining pages.
+3) Interactive map of Europe where the user can hover over the countries and some information about that country and an image of a famous landmark of its capital will appear. In addition, when the user hovers over a country, it changes color from dark blue to yellow as shown below.
+   
+![interactiveMap](https://github.com/user-attachments/assets/ddd2b195-d489-44fd-a654-ca6d1a029756)
 
-Τεχνολογίες που χρησιμοποιήθηκαν
-Backend
+4) The user can click on one of the available countries and will be taken to the Flights page.
 
-Node.js – Εκτέλεση του server
+#### Flights
 
-Express.js – REST API routes & επιχειρησιακή λογική
+The Flights page corresponds to the file “flights.html” which contains the available flights offered by the airline.
+The supported functions are:
+1) User navigation to the Home, Sign-up and Sign-in pages which correspond to the files “homepage.html”, “signUp.html” and “signIn.html” via the navigation bar at the top of the page.
+2) View available flights offered by the company through cards from the Bootstrap library. The user can read the destination, departure date, departure and destination airport for each available flight. Only flights that are available are displayed, i.e. those with a departure date after the date the user has visited the application.
 
-MongoDB – Αποθήκευση χρηστών, πτήσεων και κρατήσεων
+![flights1](https://github.com/user-attachments/assets/1cc7fb16-20c0-473e-8ae7-4337864b926a)
 
-Mongoose – Μοντελοποίηση δεδομένων και schema validation
+3) Search bar for available flights based on destination country. The user can type the name of the country in whole or in part and the application will search for all available flights where the name of the destination country matches the search field. In the image below, we will type “gr” in the search bar and the page will only show us available flights where the destination country contains the phrase “gr”
 
-Frontend
+![flights2](https://github.com/user-attachments/assets/af40fcee-2cba-4baa-a9f1-bcff3567979c)
 
-Vue.js – Διεπαφή χρήστη
+If there are no flights available then none will be displayed.
 
-HTML5 / CSS3
+4) Prompt message for user registration or login. The user who has visited this specific page has not yet registered or logged in, while this is required to purchase tickets. To direct the user to create an account or log in in case they do not know how, there is a message that they can click on and direct them to the “Sign-up” registration page and the “Sign-in” login page respectively. As shown below, the prompt messages are located between the navigation bar and the search field and the user can click on the blue letters respectively.
 
-Bootstrap – Σχεδιασμός & responsive στοιχεία
+![flights3](https://github.com/user-attachments/assets/649b76ac-2cca-437b-a51a-b2ffd1e888fc)
 
-Axios – Επικοινωνία με το REST API
+5) Dark Mode function if selected from the Home page as shown in the image below.
 
-Other
+![flights4](https://github.com/user-attachments/assets/df528490-5884-4a71-8e34-4525b9ef11be)
 
-RESTful API Architecture
+#### Sign-up
+The Sign-up page corresponds to the file “signUp.html” in which the user performs the process of creating an account and registering in the application. The functions supported by the Sign-up page are:
+1) Creating an account and registering the user by filling in the fields of the page with the corresponding information. The user must fill in all the fields to register in the application. The fields include first name “Firstname”, last name “Lastname”, login name “Username”, login code “password” and contact number “Telephone”.
 
-JSON-based communication
+![signup1](https://github.com/user-attachments/assets/97c911c3-b883-4891-862c-dfffbf4822b5)
 
-npm για διαχείριση πακέτων
+To demonstrate the functionality, we will fill in the fields with values ​​and register in the application. Fill in the fields with the indicative values ​​shown in the image and click the “Sign Up” button at the bottom of the page.
 
-Περιγραφή των αρχείων
+![signup2](https://github.com/user-attachments/assets/f985b910-e77b-4bab-b3cc-af042cecfd4a)
 
-backend/app.js
-Ο πυρήνας της εφαρμογής. Περιέχει τον Express server, σύνδεση με MongoDB και τα API routes.
+If the registration was successful, we will be taken to the Home page of registered users corresponding to the file “user_homepage.html”. Below is the registration we made in the MongoDB Atlas database.
 
-backend/models/
-Τα Mongoose models για:
+![signup3](https://github.com/user-attachments/assets/7ed357a1-1978-4034-bd9f-d5b50c758460)
 
-Χρήστες
+2) “Dark Mode” function if it has been selected from the Home page.
 
-Πτήσεις
+3) User navigation to the Home, Flights and Sign-in pages corresponding to the files “homepage.html”, “flights.html” and “signIn.html” via the navigation bar at the top of the page.
 
-Κρατήσεις
+#### Sign-in
+The Sign-in page corresponds to the file “signIn.html” in which the user performs the login process to the application with an existing account. The functions supported by the Sign-in page are:
+1) User navigation to the Home, Flights and Sign-up pages corresponding to the files “homepage.html”, “flights.html” and “signUp.html” via the navigation bar at the top of the page.
+2) Connecting the user to an existing account in the application by filling in the “Username” and “Password” fields with the appropriate information and selecting the “Sign In” button at the bottom of the page.
+   
+![signin1](https://github.com/user-attachments/assets/1501954f-21ab-4df5-b2c7-b4c25e13f548)
 
-backend/routes/
-Περιέχει όλα τα REST API endpoints για:
+To demonstrate the function, we will fill in the fields with values ​​and connect to the account we created previously during Sign Up.
+As shown in the image below, we filled in the fields with the username and password values ​​of the account and then click the Sign In button.
 
-Authentication
+![signin2](https://github.com/user-attachments/assets/309ca62c-ab99-4693-9269-c007a41ddb41)
 
-Flights
+If the connection was successful, we will be transferred to the registered user's home page “Home” which corresponds to the file “user_homepage.html”. If the information we filled in was incorrect, then a corresponding message will appear as shown in the image below in red letters and to connect we will have to enter the correct account information and click the Sign In button again.
 
-Bookings
+![signin3](https://github.com/user-attachments/assets/0751954d-20ed-49ba-aee3-e259e30d875f)
 
-backend/package.json
-Βιβλιοθήκες & scripts του backend.
+3) “Dark Mode” function if selected from the Home page
 
-frontend/src/
-Κύριος κώδικας Vue.js (σελίδες, components, views).
+### Rewgistered User Pages
 
-frontend/public/
-Static αρχεία του front-end.
+### Administrator Pages
+To access the administrator pages and functions, the user must log in to their account from the Sign In page that corresponds to the “signIn.html” file as previously mentioned in the unregistered user pages. Specifically, there is only one administrator account in the application and there is no function to create such an account through the application. The administrator login details are as follows:
+Username: admin
+Password: admin
+To log in to their account, the administrator needs to fill in these details in the corresponding fields of the Sign In page as shown in the image below.
 
-frontend/package.json
-Βιβλιοθήκες & scripts του frontend.
+![admin1](https://github.com/user-attachments/assets/356ab2f7-d957-4b06-bf4e-e8aced1ceb0b)
 
-docs/report.pdf
-Προαιρετικό – αναλυτική τεκμηρίωση της εφαρμογής.
+If the administrator logs in successfully, he will be transferred to the initial management page “Home” corresponding to the file “admin_homepage.html” which is shown in the image below.
 
-README.md
-Το παρόν αρχείο που περιγράφει το σύστημα SkyAirlines.
+![admin2](https://github.com/user-attachments/assets/0298a67a-9d7c-4b00-9efc-96261fafb1e3)
 
-Τρόπος Εκτέλεσης
-1) Κατέβασμα του Project
+#### Home
+The admin Home page corresponds to the file “admin_homepage.html” and is the home page of the application administrator. The functions of this page are:
+1) Administrator navigation to the Flight Administration and User Administration pages corresponding to the files “admin_flights.html” and “admin_users.html” via the navigation bar at the top of the page.
+2) Switch the application colors to darker tones using the “Dark Mode” button on the right side of the navigation bar. The result of this option is shown in the image below. This option remains on the remaining pages.
+3) Log out of the application via the Sign-Out button located in the navigation bar. If the administrator wants to log out of his account, he must click the Sign Out button and then a confirmation message will appear as shown below.
 
-Κατεβάζουμε ή κάνουμε clone το repository:
+![admin3](https://github.com/user-attachments/assets/93fa5310-a243-4819-ab44-91725deaf471)
 
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
+Here the administrator can confirm his disconnection by pressing the OK button, otherwise he can cancel his disconnection and remain on the same page by pressing the Cancel button. In case he presses OK, he will be transferred to the Home page of the unregistered user.
 
-2) Εκτέλεση Backend
-cd backend
-npm install
-npm start
+#### Flight Administration
+The Flight Administration page corresponds to the admin_flights.html file and contains functions for managing the application's flights. The page contains the following functions:
+1) Administrator navigation to the Home and User Administration pages that correspond to the “admin_homepage.html” and “admin_users.html” files via the navigation bar at the top of the page.
+2) Create a new flight: The administrator can create a new flight by appropriately filling in the fields under the title “Create New Flight”. These fields are the departure airport “Departure Airport”, the arrival airport “Arrival Airport”, the departure country “Departure Country”, the destination country “Destination Country”, the departure date and time “Departure Date”, the total seats of the flight “Total Seats”, the cost of business seats “Business Ticket Price” and the cost of economy seats “Economy Ticket Price”. The departure country and destination country fields are dropdown lists and the administrator selects one of the available countries. After properly filling in the fields, he must press the Create flight button to create a flight with these details.
+   
+![createFlight1](https://github.com/user-attachments/assets/87feecad-1ee3-4ee6-b6f6-7240b71b9150)
 
+Below we will fill in the fields to demonstrate the function.
 
-Ο server εκτελείται στο:
-http://localhost:3000
+![createFlight2](https://github.com/user-attachments/assets/62bc0555-ab24-43a1-a6e7-0192c39395b2)
 
-3) Εκτέλεση Frontend
-cd frontend
-npm install
-npm run serve
+After clicking the Create flight button, the record will be created in the database as shown below.
 
+![createFlight3](https://github.com/user-attachments/assets/1a7eaccd-ba01-4c90-9c2f-f0f8aab539f4)
 
-Το web interface εκτελείται στο:
-http://localhost:8080
+Please note that the flight departure date and time is stored in the database in UTC time and for this reason it differs from the time we chose when creating the flight.
+3) Search for flights from the database and display their details:
+The administrator can search for flights stored in the database by filling in the departure country fields “Departure Country” and departure date “Departure Date” with appropriate information and pressing the Search button located in the middle of the page.
 
-Τρόπος Χρήσης
-Ως Χρήστης
+![createFlight4](https://github.com/user-attachments/assets/f43e2e97-f288-4180-8d45-d9be85f5837b)
 
-Εγγραφή νέου χρήστη
-Ο χρήστης μπορεί να δημιουργήσει λογαριασμό εισάγοντας τα στοιχεία του μέσω της σχετικής φόρμας.
+If there are no flights with these details in the database, then an appropriate message is displayed.
 
-Screenshot Placeholder
+![createFlight5](https://github.com/user-attachments/assets/99fc06fe-94ff-4bbf-8c79-cb7fef767f03)
 
-Σύνδεση στον λογαριασμό
-Ο χρήστης συνδέεται εισάγοντας το username και τον κωδικό του.
+If there are flights with these details, they are displayed in a table format as shown below.
 
-Αναζήτηση πτήσεων
-Ο χρήστης εισάγει:
+![searchflight1](https://github.com/user-attachments/assets/aa6df62e-f113-4170-b45f-5b12fba41fd8)
 
-Ημερομηνία
+The table shows the unique flight ID, the remaining flight details we mentioned previously, as well as the number of tickets that have been purchased.
 
-Προορισμό
+4) Flight Edit: The administrator can edit the details of an existing flight by filling in the unique flight ID “Flight ID” and filling in the flight fields that need editing and pressing the Update Flight button. The Flight ID can be obtained from the flight search as mentioned earlier.
 
-Αεροπορική εταιρεία (προαιρετικά)
+![editFlight1](https://github.com/user-attachments/assets/fe1f42d7-2d28-43e1-a9d5-a076615a310d)
 
-και εμφανίζονται οι διαθέσιμες πτήσεις.
+Next, we will edit the flight we created in the previous example. Specifically, we will change the arrival airport “Departure Country” from “BCL” to “MLN” and the departure date “Departure Date” from 20/09/2023 to 21/09/2023.
 
-Screenshot Placeholder
+![editFlight2](https://github.com/user-attachments/assets/3168c415-e6ae-4939-bea5-7e103dc8b7a1)
 
-Κράτηση εισιτηρίου
-Στην οθόνη μίας πτήσης μπορεί να γίνει κράτηση θέσης και επιβεβαίωση εισιτηρίου.
+Below are the changes to the flight through the database.
 
-Screenshot Placeholder
+![editFlight3](https://github.com/user-attachments/assets/4ad4b876-2912-4a75-9ada-8e26cc88cc4f)
 
-Προβολή κρατήσεων
-Ο χρήστης βλέπει όλες τις μελλοντικές κρατήσεις του και μπορεί να δει λεπτομέρειες.
+We can observe through the unique id that changes were made to the details of the same flight.
+5) Delete flight. The administrator can permanently delete a flight from the database and therefore from the application by filling in the unique id of the flight “Flight ID” and pressing the Delete Flight button. The Flight ID can be obtained from the flight search as mentioned previously.
 
-Ακύρωση κράτησης
-Ο χρήστης μπορεί να ακυρώσει μία κράτηση, με άμεση ενημέρωση των διαθεσίμων θέσεων.
+![deleteFlight1](https://github.com/user-attachments/assets/c9b5f84c-add2-4d17-b31f-332485a33782)
 
-Αποσύνδεση
-Από το μενού μπορεί να γίνει logout.
+When the Delete Flight button is pressed, a confirmation message will appear on the administrator's screen as shown below.
 
-Ως Διαχειριστής
+![deleteFlight2](https://github.com/user-attachments/assets/964c85c2-84b7-48bd-8ea9-55d83c7bf440)
 
-Ο λογαριασμός του διαχειριστή καθορίζεται μέσα στη βάση ή στο αρχείο αρχικοποίησης.
+If the OK button is pressed, the flight will be deleted from the database, while if the Cancel button is pressed, the deletion will be canceled.
 
-Σύνδεση admin
-Ο διαχειριστής συνδέεται με τα δικά του credentials.
+6) “Dark Mode” function if it has been selected from the Home page.
+7) Log out of the application via the Sign-Out button located in the navigation bar. If the administrator wants to log out of his account, he must click the Sign Out button and then a confirmation message will appear as shown below.
 
-Διαχείριση πτήσεων
+![deleteFlight3](https://github.com/user-attachments/assets/f56fe1ae-24d4-41e5-9efa-66b2cae9c286)
 
-Προσθήκη νέας πτήσης
+Here the administrator can confirm his logout by pressing the OK button, otherwise he can cancel his logout and remain on the same page by pressing the Cancel button. In case he presses OK he will be transferred to the Home page of the unregistered user.
 
-Επεξεργασία υπαρχουσών
+#### User Administration
+The User Administration page corresponds to the file “admin_users.html” and contains user management functions. Specifically, the functions contained are:
+1) Administrator navigation to the Home and Flight Administration pages corresponding to the files “admin_homepage.html” and “admin_flights.html” via the navigation bar at the top of the page
+2) Display the total number of registered users: At the top of the page, just below the navigation bar, there is a message that looks up the database and displays the number of registered users as shown in the image below. At this time, there are 27 registered users.
+![userAdmin](https://github.com/user-attachments/assets/c77abaf7-f3d8-4e12-bd82-b22a898b8c60)
 
-Διαγραφή πτήσεων
+3) Create a new user: The administrator can create a new user account in the application by filling in the fields “First Name”, “Last Name”, “Username”, “Password”, “Telephone” and clicking the Create User button.
 
-Screenshot Placeholder
+![userAdmin1](https://github.com/user-attachments/assets/bfe381b3-b9aa-4dc5-92b8-c6f0c7edc107)
 
-Διαχείριση χρηστών
-Ο admin μπορεί να δει χρήστες και κρατήσεις.
 
-Προβολή όλων των κρατήσεων
-Πλήρης λίστα όλων των εισιτηρίων που έχουν εκδοθεί.
-
-Αποσύνδεση διαχειριστή
-
-Αναφορές
-
-
-
-Κατά την ανάπτυξη χρησιμοποιήθηκαν βασικές τεχνικές MEVN stack, επίσημη τεκμηρίωση των βιβλιοθηκών και παραδείγματα REST API αρχιτεκτονικής.
--->
