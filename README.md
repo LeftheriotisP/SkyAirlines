@@ -98,6 +98,12 @@ Step 4: Start from the “homepage.html” page, which is the home page of the u
 
 ### Change email address
 In order for the server to be able to send email to the user, an email address and the password for it are required so that emails can be sent from it. During the tests in creating the function, it was found difficult to use Gmail accounts, for this reason it is recommended to use an Outlook account. To change the sending email, lines 28 and 39 of app.js file containing the email address and line 29 containing the password must be replaced with the corresponding information of the email you want to use.
+
+###Possible problems
+If you encounter a problem when starting the application, make sure that on line 19 in the app.js file, inside the quotes, the name of the folder in which the application files are located is written, followed by “/html”. In this case, it is “SkyAirlines” as shown in the image below.
+
+![appstart3](https://github.com/user-attachments/assets/7bfb1969-92c2-4e84-b202-68561724c460)
+
 <!---
 your comment goes here
 and here
