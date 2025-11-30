@@ -16,8 +16,8 @@ Panagiotis Leftheriotis
   - [Application termination](#application-termination)
 - [Application pages](#application-pages)
   - [Unregistered User Pages](#Unregistered-User-Pages)
-  - [](#)
-  - [](#)
+  - [Registered User Pages](#registered-User-Pages)
+  - [Administrator Pages](#Administrator-Pages)
     
 ## Technologies Used
 
@@ -197,7 +197,7 @@ If the connection was successful, we will be transferred to the registered user'
 
 3) “Dark Mode” function if selected from the Home page
 
-### Rewgistered User Pages
+### Registered User Pages
 
 ### Administrator Pages
 To access the administrator pages and functions, the user must log in to their account from the Sign In page that corresponds to the “signIn.html” file as previously mentioned in the unregistered user pages. Specifically, there is only one administrator account in the application and there is no function to create such an account through the application. The administrator login details are as follows:
