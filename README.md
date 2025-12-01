@@ -1,4 +1,4 @@
-# SkyAirlines – Airport Ticket Reservation System (MEVN)
+# SkyAirlines – Airport Ticket Reservation App (MEVN)
 ## Author 
 Panagiotis Leftheriotis
 
